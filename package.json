@@ -1,0 +1,85 @@
+{
+  "name": "task-management-app",
+  "version": "1.0.0",
+  "description": "Collaborative task management application with real-time updates",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "lint:fix": "vue-cli-service lint --fix",
+    "test": "vue-cli-service test:unit",
+    "test:e2e": "vue-cli-service test:e2e",
+    "firebase:init": "firebase init",
+    "firebase:deploy": "firebase deploy",
+    "firebase:serve": "firebase serve",
+    "firebase:emulators": "firebase emulators:start",
+    "precommit": "npm run lint",
+    "prepare": "husky install"
+  },
+  "dependencies": {
+    "vue": "^2.6.14",
+    "vue-router": "^3.5.1",
+    "vuex": "^3.6.2",
+    "vuetify": "^2.6.0",
+    "firebase": "^9.17.1",
+    "vue-draggable": "^2.24.3",
+    "vuedraggable": "^2.24.3",
+    "@mdi/font": "^6.9.96",
+    "vue-toastification": "^2.0.0-rc.5"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-eslint": "~5.0.0",
+    "@vue/cli-plugin-router": "~5.0.0",
+    "@vue/cli-plugin-vuex": "~5.0.0",
+    "@vue/cli-service": "~5.0.0",
+    "@vue/eslint-config-standard": "^6.1.0",
+    "eslint": "^7.32.0",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.2.0",
+    "eslint-plugin-standard": "^5.0.0",
+    "eslint-plugin-vue": "^8.0.3",
+    "sass": "^1.32.7",
+    "sass-loader": "^12.0.0",
+    "vue-template-compiler": "^2.6.14",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.1.0",
+    "firebase-tools": "^11.16.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ],
+  "lint-staged": {
+    "*.{js,vue}": [
+      "eslint --fix",
+      "git add"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "engines": {
+    "node": ">=14.0.0",
+    "npm": ">=6.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/task-management-app.git"
+  },
+  "keywords": [
+    "vue",
+    "firebase",
+    "task-management",
+    "collaboration",
+    "real-time",
+    "vuetify",
+    "vuex"
+  ],
+  "author": "Your Name <your.email@example.com>",
+  "license": "MIT"
+}

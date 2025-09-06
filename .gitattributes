@@ -1,0 +1,65 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# Custom for Visual Studio
+*.cs     diff=csharp
+
+# Standard to msysgit
+*.doc	 diff=astextplain
+*.DOC	 diff=astextplain
+*.docx diff=astextplain
+*.DOCX diff=astextplain
+*.dot  diff=astextplain
+*.DOT  diff=astextplain
+*.pdf  diff=astextplain
+*.PDF	 diff=astextplain
+*.rtf	 diff=astextplain
+*.RTF	 diff=astextplain
+
+# Markdown files
+*.md text
+*.MD text
+
+# JSON files
+*.json text
+*.JSON text
+
+# YAML files
+*.yml text
+*.yaml text
+
+# JavaScript files
+*.js text
+*.jsx text
+*.ts text
+*.tsx text
+
+# Vue files
+*.vue text
+
+# CSS files
+*.css text
+*.scss text
+*.sass text
+*.less text
+
+# HTML files
+*.html text
+*.htm text
+
+# XML files
+*.xml text
+
+# Configuration files
+*.config text
+*.conf text
+*.ini text
+
+# Package files
+package.json text
+package-lock.json text
+yarn.lock text
+
+# Git files
+.gitignore text
+.gitattributes text
