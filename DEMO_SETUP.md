@@ -39,7 +39,7 @@ Update `src/firebase/config.js` with your demo Firebase config:
 ```javascript
 const firebaseConfig = {
   apiKey: "your-demo-api-key",
-  authDomain: "task-management-demo.firebaseapp.com",
+  authDomain: 'task-management-demo.firebaseapp.com',
   projectId: "task-management-demo",
   storageBucket: "task-management-demo.appspot.com",
   messagingSenderId: "123456789",

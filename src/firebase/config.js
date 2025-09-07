@@ -1,4 +1,6 @@
 import firebase from 'firebase/compat/app'
+import { initializeApp } from 'firebase/app'
+import { getAnalytics } from 'firebase/analytics'
 import 'firebase/compat/auth'
 import 'firebase/compat/firestore'
 import 'firebase/compat/functions'
@@ -6,12 +8,13 @@ import 'firebase/compat/functions'
 // Your Firebase configuration
 // Replace with your actual Firebase config from Firebase Console
 const firebaseConfig = {
-  apiKey: 'your-actual-api-key-here',
-  authDomain: 'your-project-id.firebaseapp.com',
-  projectId: 'your-project-id',
-  storageBucket: 'your-project-id.appspot.com',
-  messagingSenderId: 'your-messaging-sender-id',
-  appId: 'your-app-id'
+  apiKey: 'AIzaSyDuIV4ObYFC6i9gJCOuwSqk4gRwYJ6p65E',
+  authDomain: 'task-management-app-32eee.firebaseapp.com',
+  projectId: 'task-management-app-32eee',
+  storageBucket: 'task-management-app-32eee.firebasestorage.app',
+  messagingSenderId: '943276672402',
+  appId: '1:943276672402:web:f4fed964ef4dd0359b6d4b',
+  measurementId: 'G-RG4DCEMK43'
 }
 
 // Initialize Firebase
@@ -21,6 +24,8 @@ firebase.initializeApp(firebaseConfig)
 const auth = firebase.auth()
 const db = firebase.firestore()
 const functions = firebase.functions()
+const app = initializeApp(firebaseConfig)
+const analytics = getAnalytics(app)
 
 // Enable offline persistence
 db.enablePersistence().catch((err) => {
@@ -31,5 +36,5 @@ db.enablePersistence().catch((err) => {
   }
 })
 
-export { auth, db, functions }
+export { auth, db, functions, analytics }
 export default firebase
