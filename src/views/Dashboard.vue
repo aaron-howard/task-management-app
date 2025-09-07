@@ -126,13 +126,13 @@ export default {
     ...mapGetters('auth', ['user']),
     ...mapGetters('tasks', ['tasks']),
     ...mapGetters('teams', ['userTeams']),
-    
+
     stats() {
       const tasksByStatus = this.tasks.reduce((acc, task) => {
         acc[task.status] = (acc[task.status] || 0) + 1
         return acc
       }, {})
-      
+
       return [
         {
           title: 'Total Tasks',
@@ -160,29 +160,29 @@ export default {
         }
       ]
     },
-    
+
     recentTasks() {
       return this.tasks
         .filter(task => task.status !== 'done')
         .slice(0, 5)
     }
   },
-  
+
   async mounted() {
     await this.initializeData()
   },
-  
+
   methods: {
     ...mapActions('tasks', ['fetchTasks', 'subscribeToTasks']),
     ...mapActions('teams', ['fetchTeams', 'subscribeToTeams']),
-    
+
     async initializeData() {
       try {
         await Promise.all([
           this.fetchTasks(),
           this.fetchTeams()
         ])
-        
+
         // Set up real-time subscriptions
         this.subscribeToTasks()
         this.subscribeToTeams()
@@ -191,7 +191,7 @@ export default {
         this.$toast.error('Failed to load dashboard data')
       }
     },
-    
+
     getPriorityColor(priority) {
       const colors = {
         low: 'green',
@@ -200,7 +200,7 @@ export default {
       }
       return colors[priority] || 'grey'
     },
-    
+
     getPriorityIcon(priority) {
       const icons = {
         low: 'mdi-arrow-down',
@@ -209,7 +209,7 @@ export default {
       }
       return icons[priority] || 'mdi-minus'
     },
-    
+
     getStatusColor(status) {
       const colors = {
         todo: 'grey',

@@ -41,9 +41,9 @@
           </v-list>
         </v-menu>
       </div>
-      
+
       <p class="text-body-2 text--secondary mb-2">{{ task.description }}</p>
-      
+
       <div class="d-flex justify-space-between align-center">
         <v-chip
           :color="getPriorityColor(task.priority)"
@@ -53,7 +53,7 @@
           <v-icon left small>{{ getPriorityIcon(task.priority) }}</v-icon>
           {{ task.priority }}
         </v-chip>
-        
+
         <div class="d-flex align-center">
           <v-avatar size="24" class="mr-1">
             <v-img v-if="task.assignee?.photoURL" :src="task.assignee.photoURL"></v-img>
@@ -62,7 +62,7 @@
           <span class="text-caption">{{ task.assignee?.displayName || 'Unassigned' }}</span>
         </div>
       </div>
-      
+
       <div v-if="task.dueDate" class="mt-2">
         <v-chip
           :color="isOverdue ? 'error' : 'grey'"
@@ -86,14 +86,14 @@ export default {
       required: true
     }
   },
-  
+
   computed: {
     isOverdue() {
       if (!this.task.dueDate) return false
       return new Date(this.task.dueDate) < new Date()
     }
   },
-  
+
   methods: {
     getPriorityColor(priority) {
       const colors = {
@@ -103,7 +103,7 @@ export default {
       }
       return colors[priority] || 'grey'
     },
-    
+
     getPriorityIcon(priority) {
       const icons = {
         low: 'mdi-arrow-down',
@@ -112,7 +112,7 @@ export default {
       }
       return icons[priority] || 'mdi-minus'
     },
-    
+
     formatDate(date) {
       return new Date(date).toLocaleDateString()
     }

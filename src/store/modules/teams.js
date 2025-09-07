@@ -15,8 +15,8 @@ const getters = {
   userTeams: (state, getters, rootState, rootGetters) => {
     const userId = rootGetters['auth/user']?.uid
     if (!userId) return []
-    
-    return state.teams.filter(team => 
+
+    return state.teams.filter(team =>
       team.members.includes(userId) || team.createdBy === userId
     )
   }
@@ -57,19 +57,19 @@ const actions = {
     try {
       commit('SET_LOADING', true)
       commit('CLEAR_ERROR')
-      
+
       const userId = rootGetters['auth/user']?.uid
       if (!userId) return
-      
+
       const snapshot = await db.collection('teams')
         .where('members', 'array-contains', userId)
         .get()
-      
+
       const teams = snapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
       }))
-      
+
       commit('SET_TEAMS', teams)
     } catch (error) {
       commit('SET_ERROR', error.message)
@@ -82,10 +82,10 @@ const actions = {
   async createTeam({ commit, rootGetters }, teamData) {
     try {
       commit('CLEAR_ERROR')
-      
+
       const userId = rootGetters['auth/user']?.uid
       if (!userId) throw new Error('User not authenticated')
-      
+
       const team = {
         ...teamData,
         createdBy: userId,
@@ -93,10 +93,10 @@ const actions = {
         createdAt: new Date(),
         updatedAt: new Date()
       }
-      
+
       const docRef = await db.collection('teams').add(team)
       const newTeam = { id: docRef.id, ...team }
-      
+
       commit('ADD_TEAM', newTeam)
       return newTeam
     } catch (error) {
@@ -108,12 +108,12 @@ const actions = {
   async updateTeam({ commit }, { teamId, updates }) {
     try {
       commit('CLEAR_ERROR')
-      
+
       await db.collection('teams').doc(teamId).update({
         ...updates,
         updatedAt: new Date()
       })
-      
+
       const updatedTeam = { id: teamId, ...updates }
       commit('UPDATE_TEAM', updatedTeam)
       return updatedTeam
@@ -126,7 +126,7 @@ const actions = {
   async deleteTeam({ commit }, teamId) {
     try {
       commit('CLEAR_ERROR')
-      
+
       await db.collection('teams').doc(teamId).delete()
       commit('DELETE_TEAM', teamId)
     } catch (error) {
@@ -138,33 +138,33 @@ const actions = {
   async addMemberToTeam({ commit, dispatch }, { teamId, memberEmail }) {
     try {
       commit('CLEAR_ERROR')
-      
+
       // Find user by email
       const usersSnapshot = await db.collection('users')
         .where('email', '==', memberEmail)
         .get()
-      
+
       if (usersSnapshot.empty) {
         throw new Error('User not found')
       }
-      
+
       const userDoc = usersSnapshot.docs[0]
       const userId = userDoc.id
-      
+
       // Get current team data
       const teamDoc = await db.collection('teams').doc(teamId).get()
       const teamData = teamDoc.data()
-      
+
       if (teamData.members.includes(userId)) {
         throw new Error('User is already a member of this team')
       }
-      
+
       // Add user to team
       await db.collection('teams').doc(teamId).update({
         members: [...teamData.members, userId],
         updatedAt: new Date()
       })
-      
+
       // Refresh teams
       await dispatch('fetchTeams')
     } catch (error) {
@@ -176,19 +176,19 @@ const actions = {
   async removeMemberFromTeam({ commit, dispatch }, { teamId, userId }) {
     try {
       commit('CLEAR_ERROR')
-      
+
       // Get current team data
       const teamDoc = await db.collection('teams').doc(teamId).get()
       const teamData = teamDoc.data()
-      
+
       // Remove user from team
       const updatedMembers = teamData.members.filter(id => id !== userId)
-      
+
       await db.collection('teams').doc(teamId).update({
         members: updatedMembers,
         updatedAt: new Date()
       })
-      
+
       // Refresh teams
       await dispatch('fetchTeams')
     } catch (error) {

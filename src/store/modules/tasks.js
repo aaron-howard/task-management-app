@@ -18,19 +18,19 @@ const getters = {
   filters: state => state.filters,
   filteredTasks: state => {
     let filtered = state.tasks
-    
+
     if (state.filters.status !== 'all') {
       filtered = filtered.filter(task => task.status === state.filters.status)
     }
-    
+
     if (state.filters.assignee !== 'all') {
       filtered = filtered.filter(task => task.assigneeId === state.filters.assignee)
     }
-    
+
     if (state.filters.priority !== 'all') {
       filtered = filtered.filter(task => task.priority === state.filters.priority)
     }
-    
+
     return filtered.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
   },
   tasksByStatus: state => {
@@ -77,20 +77,20 @@ const actions = {
     try {
       commit('SET_LOADING', true)
       commit('CLEAR_ERROR')
-      
+
       const userId = rootGetters['auth/user']?.uid
       if (!userId) return
-      
+
       const snapshot = await db.collection('tasks')
         .where('teamId', 'in', await getTeamIds(userId))
         .orderBy('createdAt', 'desc')
         .get()
-      
+
       const tasks = snapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
       }))
-      
+
       commit('SET_TASKS', tasks)
     } catch (error) {
       commit('SET_ERROR', error.message)
@@ -103,10 +103,10 @@ const actions = {
   async createTask({ commit, rootGetters }, taskData) {
     try {
       commit('CLEAR_ERROR')
-      
+
       const userId = rootGetters['auth/user']?.uid
       if (!userId) throw new Error('User not authenticated')
-      
+
       const task = {
         ...taskData,
         createdBy: userId,
@@ -115,10 +115,10 @@ const actions = {
         status: 'todo',
         priority: taskData.priority || 'medium'
       }
-      
+
       const docRef = await db.collection('tasks').add(task)
       const newTask = { id: docRef.id, ...task }
-      
+
       commit('ADD_TASK', newTask)
       return newTask
     } catch (error) {
@@ -130,12 +130,12 @@ const actions = {
   async updateTask({ commit }, { taskId, updates }) {
     try {
       commit('CLEAR_ERROR')
-      
+
       await db.collection('tasks').doc(taskId).update({
         ...updates,
         updatedAt: new Date()
       })
-      
+
       const updatedTask = { id: taskId, ...updates }
       commit('UPDATE_TASK', updatedTask)
       return updatedTask
@@ -148,7 +148,7 @@ const actions = {
   async deleteTask({ commit }, taskId) {
     try {
       commit('CLEAR_ERROR')
-      
+
       await db.collection('tasks').doc(taskId).delete()
       commit('DELETE_TASK', taskId)
     } catch (error) {
@@ -160,15 +160,15 @@ const actions = {
   async moveTask({ commit }, { taskId, newStatus, newOrder }) {
     try {
       commit('CLEAR_ERROR')
-      
+
       const updates = {
         status: newStatus,
         order: newOrder,
         updatedAt: new Date()
       }
-      
+
       await db.collection('tasks').doc(taskId).update(updates)
-      
+
       const updatedTask = { id: taskId, ...updates }
       commit('UPDATE_TASK', updatedTask)
     } catch (error) {
@@ -186,7 +186,7 @@ const actions = {
     if (!userId) return
 
     const teamIds = await getTeamIds(userId)
-    
+
     return db.collection('tasks')
       .where('teamId', 'in', teamIds)
       .orderBy('createdAt', 'desc')
@@ -208,7 +208,7 @@ async function getTeamIds(userId) {
   const userTeamsSnapshot = await db.collection('teams')
     .where('members', 'array-contains', userId)
     .get()
-  
+
   return userTeamsSnapshot.docs.map(doc => doc.id)
 }
 

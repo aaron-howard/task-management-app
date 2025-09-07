@@ -19,14 +19,14 @@
               <h2 class="text-h5">{{ user.displayName || 'No Name' }}</h2>
               <p class="text-body-2 text--secondary">{{ user.email }}</p>
             </div>
-            
+
             <v-divider class="mb-4"></v-divider>
-            
+
             <div class="mb-3">
               <strong>User ID:</strong>
               <div class="text-caption">{{ user.uid }}</div>
             </div>
-            
+
             <div class="mb-3">
               <strong>Email Verified:</strong>
               <v-chip
@@ -37,12 +37,12 @@
                 {{ user.emailVerified ? 'Yes' : 'No' }}
               </v-chip>
             </div>
-            
+
             <div class="mb-3">
               <strong>Last Login:</strong>
               <div class="text-caption">{{ formatDate(user.metadata?.lastSignInTime) }}</div>
             </div>
-            
+
             <div class="mb-3">
               <strong>Account Created:</strong>
               <div class="text-caption">{{ formatDate(user.metadata?.creationTime) }}</div>
@@ -50,7 +50,7 @@
           </v-card-text>
         </v-card>
       </v-col>
-      
+
       <v-col cols="12" md="8">
         <v-card>
           <v-card-title>Account Settings</v-card-title>
@@ -62,7 +62,7 @@
                 :rules="nameRules"
                 required
               ></v-text-field>
-              
+
               <v-text-field
                 v-model="form.email"
                 label="Email"
@@ -71,14 +71,14 @@
                 required
                 disabled
               ></v-text-field>
-              
+
               <v-text-field
                 v-model="form.currentPassword"
                 label="Current Password"
                 type="password"
                 prepend-icon="mdi-lock"
               ></v-text-field>
-              
+
               <v-text-field
                 v-model="form.newPassword"
                 label="New Password"
@@ -86,7 +86,7 @@
                 prepend-icon="mdi-lock-plus"
                 :rules="passwordRules"
               ></v-text-field>
-              
+
               <v-text-field
                 v-model="form.confirmPassword"
                 label="Confirm New Password"
@@ -96,7 +96,7 @@
               ></v-text-field>
             </v-form>
           </v-card-text>
-          
+
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn
@@ -109,7 +109,7 @@
             </v-btn>
           </v-card-actions>
         </v-card>
-        
+
         <v-card class="mt-4">
           <v-card-title>Danger Zone</v-card-title>
           <v-card-text>
@@ -191,11 +191,11 @@ export default {
       ]
     }
   },
-  
+
   computed: {
     ...mapGetters('auth', ['user'])
   },
-  
+
   watch: {
     user: {
       handler(newUser) {
@@ -207,41 +207,41 @@ export default {
       immediate: true
     }
   },
-  
+
   methods: {
     ...mapActions('auth', ['logout']),
-    
+
     async updateProfile() {
       if (!this.$refs.form.validate()) return
-      
+
       this.loading = true
       try {
         const user = auth.currentUser
-        
+
         // Update display name
         if (this.form.displayName !== user.displayName) {
           await user.updateProfile({
             displayName: this.form.displayName
           })
         }
-        
+
         // Update password if provided
         if (this.form.newPassword) {
           if (!this.form.currentPassword) {
             throw new Error('Current password is required to change password')
           }
-          
+
           // Re-authenticate user
           const credential = auth.EmailAuthProvider.credential(
             user.email,
             this.form.currentPassword
           )
           await user.reauthenticateWithCredential(credential)
-          
+
           // Update password
           await user.updatePassword(this.form.newPassword)
         }
-        
+
         this.$toast.success('Profile updated successfully')
         this.resetForm()
       } catch (error) {
@@ -251,14 +251,14 @@ export default {
         this.loading = false
       }
     },
-    
+
     async deleteAccount() {
       if (this.deleteConfirmation !== 'DELETE') return
-      
+
       try {
         const user = auth.currentUser
         await user.delete()
-        
+
         this.$toast.success('Account deleted successfully')
         await this.logout()
       } catch (error) {
@@ -266,13 +266,13 @@ export default {
         console.error('Error deleting account:', error)
       }
     },
-    
+
     resetForm() {
       this.form.currentPassword = ''
       this.form.newPassword = ''
       this.form.confirmPassword = ''
     },
-    
+
     formatDate(dateString) {
       if (!dateString) return 'Unknown'
       return new Date(dateString).toLocaleString()

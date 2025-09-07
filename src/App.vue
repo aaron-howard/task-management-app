@@ -7,11 +7,11 @@
       elevation="2"
     >
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-      
+
       <v-toolbar-title>Task Management</v-toolbar-title>
-      
+
       <v-spacer></v-spacer>
-      
+
       <v-btn
         v-if="!isAuthenticated"
         text
@@ -19,7 +19,7 @@
       >
         Login
       </v-btn>
-      
+
       <v-menu v-else offset-y>
         <template v-slot:activator="{ on, attrs }">
           <v-btn

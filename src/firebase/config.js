@@ -4,14 +4,14 @@ import 'firebase/compat/firestore'
 import 'firebase/compat/functions'
 
 // Your Firebase configuration
-// Replace with your actual Firebase config
+// Replace with your actual Firebase config from Firebase Console
 const firebaseConfig = {
-  apiKey: "your-api-key",
-  authDomain: "your-project.firebaseapp.com",
-  projectId: "your-project-id",
-  storageBucket: "your-project.appspot.com",
-  messagingSenderId: "123456789",
-  appId: "your-app-id"
+  apiKey: 'your-actual-api-key-here',
+  authDomain: 'your-project-id.firebaseapp.com',
+  projectId: 'your-project-id',
+  storageBucket: 'your-project-id.appspot.com',
+  messagingSenderId: 'your-messaging-sender-id',
+  appId: 'your-app-id'
 }
 
 // Initialize Firebase

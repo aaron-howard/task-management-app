@@ -17,7 +17,7 @@
                 :rules="nameRules"
                 required
               ></v-text-field>
-              
+
               <v-text-field
                 v-model="form.email"
                 label="Email"
@@ -27,7 +27,7 @@
                 :rules="emailRules"
                 required
               ></v-text-field>
-              
+
               <v-text-field
                 v-model="form.password"
                 label="Password"
@@ -37,7 +37,7 @@
                 :rules="passwordRules"
                 required
               ></v-text-field>
-              
+
               <v-text-field
                 v-model="form.confirmPassword"
                 label="Confirm Password"
@@ -60,9 +60,9 @@
               Register
             </v-btn>
           </v-card-actions>
-          
+
           <v-divider></v-divider>
-          
+
           <v-card-actions>
             <v-btn
               color="primary"
@@ -74,7 +74,7 @@
               Register with Google
             </v-btn>
           </v-card-actions>
-          
+
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn text color="primary" to="/login">
@@ -82,7 +82,7 @@
             </v-btn>
           </v-card-actions>
         </v-card>
-        
+
         <v-alert
           v-if="error"
           type="error"
@@ -131,18 +131,18 @@ export default {
   computed: {
     ...mapGetters('auth', ['loading', 'error']),
     isFormValid() {
-      return this.form.displayName && 
-             this.form.email && 
-             this.form.password && 
+      return this.form.displayName &&
+             this.form.email &&
+             this.form.password &&
              this.form.confirmPassword &&
-             /.+@.+\..+/.test(this.form.email) && 
+             /.+@.+\..+/.test(this.form.email) &&
              this.form.password.length >= 6 &&
              this.form.password === this.form.confirmPassword
     }
   },
   methods: {
     ...mapActions('auth', ['signUp', 'signInWithGoogle', 'clearError']),
-    
+
     async handleRegister() {
       try {
         await this.signUp({
@@ -155,7 +155,7 @@ export default {
         this.$toast.error('Registration failed: ' + error.message)
       }
     },
-    
+
     async handleGoogleLogin() {
       try {
         await this.signInWithGoogle()
@@ -164,7 +164,7 @@ export default {
         this.$toast.error('Google registration failed: ' + error.message)
       }
     },
-    
+
     clearError() {
       this.clearError()
     }

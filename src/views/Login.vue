@@ -17,7 +17,7 @@
                 :rules="emailRules"
                 required
               ></v-text-field>
-              
+
               <v-text-field
                 v-model="form.password"
                 label="Password"
@@ -40,9 +40,9 @@
               Login
             </v-btn>
           </v-card-actions>
-          
+
           <v-divider></v-divider>
-          
+
           <v-card-actions>
             <v-btn
               color="primary"
@@ -54,7 +54,7 @@
               Login with Google
             </v-btn>
           </v-card-actions>
-          
+
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn text color="primary" to="/register">
@@ -62,7 +62,7 @@
             </v-btn>
           </v-card-actions>
         </v-card>
-        
+
         <v-alert
           v-if="error"
           type="error"
@@ -101,14 +101,14 @@ export default {
   computed: {
     ...mapGetters('auth', ['loading', 'error']),
     isFormValid() {
-      return this.form.email && this.form.password && 
-             /.+@.+\..+/.test(this.form.email) && 
+      return this.form.email && this.form.password &&
+             /.+@.+\..+/.test(this.form.email) &&
              this.form.password.length >= 6
     }
   },
   methods: {
     ...mapActions('auth', ['signIn', 'signInWithGoogle', 'clearError']),
-    
+
     async handleLogin() {
       try {
         await this.signIn(this.form)
@@ -117,7 +117,7 @@ export default {
         this.$toast.error('Login failed: ' + error.message)
       }
     },
-    
+
     async handleGoogleLogin() {
       try {
         await this.signInWithGoogle()
@@ -126,7 +126,7 @@ export default {
         this.$toast.error('Google login failed: ' + error.message)
       }
     },
-    
+
     clearError() {
       this.clearError()
     }

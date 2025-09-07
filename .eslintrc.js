@@ -8,7 +8,7 @@ module.exports = {
     '@vue/standard'
   ],
   parserOptions: {
-    parser: '@babel/eslint-parser',
+    parser: 'babel-eslint',
     requireConfigFile: false
   },
   rules: {

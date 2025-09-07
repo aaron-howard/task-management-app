@@ -1,0 +1,45 @@
+name: Deploy Demo to Firebase
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18.x'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Build project
+      run: npm run build
+      env:
+        NODE_ENV: production
+    
+    - name: Deploy to Firebase Hosting
+      uses: FirebaseExtended/action-hosting-deploy@v0
+      with:
+        repoToken: '${{ secrets.GITHUB_TOKEN }}'
+        firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}'
+        channelId: live
+        projectId: ${{ secrets.FIREBASE_PROJECT_ID }}
+    
+    - name: Create Demo Data
+      if: success()
+      run: |
+        echo "Demo deployed successfully!"
+        echo "Demo URL: https://${{ secrets.FIREBASE_PROJECT_ID }}.firebaseapp.com"
+        echo "Demo accounts:"
+        echo "- demo@example.com / demo123"
+        echo "- manager@example.com / manager123"
+        echo "- designer@example.com / designer123"

@@ -63,21 +63,21 @@
               </v-list>
             </v-menu>
           </v-card-title>
-          
+
           <v-card-text>
             <p class="text-body-2 mb-3">{{ team.description || 'No description provided' }}</p>
-            
+
             <div class="d-flex align-center mb-2">
               <v-icon small class="mr-2">mdi-account-multiple</v-icon>
               <span class="text-caption">{{ team.members.length }} members</span>
             </div>
-            
+
             <div class="d-flex align-center">
               <v-icon small class="mr-2">mdi-calendar</v-icon>
               <span class="text-caption">Created {{ formatDate(team.createdAt) }}</span>
             </div>
           </v-card-text>
-          
+
           <v-card-actions>
             <v-btn
               text
@@ -128,7 +128,7 @@ export default {
     TeamDialog,
     ManageMembersDialog
   },
-  
+
   data() {
     return {
       showCreateDialog: false,
@@ -137,19 +137,19 @@ export default {
       selectedTeam: null
     }
   },
-  
+
   computed: {
     ...mapGetters('teams', ['userTeams']),
     ...mapGetters('auth', ['user'])
   },
-  
+
   async mounted() {
     await this.initializeData()
   },
-  
+
   methods: {
     ...mapActions('teams', ['fetchTeams', 'subscribeToTeams', 'createTeam', 'updateTeam', 'deleteTeam']),
-    
+
     async initializeData() {
       try {
         await this.fetchTeams()
@@ -159,17 +159,17 @@ export default {
         this.$toast.error('Failed to load teams')
       }
     },
-    
+
     editTeam(team) {
       this.editingTeam = team
       this.showCreateDialog = true
     },
-    
+
     manageMembers(team) {
       this.selectedTeam = team
       this.showMembersDialog = true
     },
-    
+
     async deleteTeam(team) {
       if (confirm(`Are you sure you want to delete the team "${team.name}"?`)) {
         try {
@@ -181,7 +181,7 @@ export default {
         }
       }
     },
-    
+
     viewTeamTasks(team) {
       // Navigate to tasks view with team filter
       this.$router.push({
@@ -189,7 +189,7 @@ export default {
         query: { team: team.id }
       })
     },
-    
+
     async handleTeamSave(teamData) {
       try {
         if (this.editingTeam) {
@@ -208,7 +208,7 @@ export default {
         console.error('Error saving team:', error)
       }
     },
-    
+
     async handleMembersSave() {
       try {
         // Refresh teams to get updated member lists
@@ -220,17 +220,17 @@ export default {
         console.error('Error updating members:', error)
       }
     },
-    
+
     closeDialog() {
       this.showCreateDialog = false
       this.editingTeam = null
     },
-    
+
     closeMembersDialog() {
       this.showMembersDialog = false
       this.selectedTeam = null
     },
-    
+
     formatDate(date) {
       return new Date(date).toLocaleDateString()
     }

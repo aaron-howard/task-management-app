@@ -9,7 +9,7 @@
       <v-card-title>
         {{ isEditing ? 'Edit Task' : 'Create Task' }}
       </v-card-title>
-      
+
       <v-card-text>
         <v-form ref="form" v-model="valid">
           <v-text-field
@@ -18,13 +18,13 @@
             :rules="titleRules"
             required
           ></v-text-field>
-          
+
           <v-textarea
             v-model="form.description"
             label="Description"
             rows="3"
           ></v-textarea>
-          
+
           <v-row>
             <v-col cols="6">
               <v-select
@@ -43,7 +43,7 @@
               ></v-select>
             </v-col>
           </v-row>
-          
+
           <v-row>
             <v-col cols="6">
               <v-select
@@ -62,7 +62,7 @@
               ></v-select>
             </v-col>
           </v-row>
-          
+
           <v-row>
             <v-col cols="6">
               <v-menu
@@ -100,7 +100,7 @@
           </v-row>
         </v-form>
       </v-card-text>
-      
+
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn
@@ -137,7 +137,7 @@ export default {
       default: null
     }
   },
-  
+
   data() {
     return {
       valid: false,
@@ -170,17 +170,17 @@ export default {
       ]
     }
   },
-  
+
   computed: {
     ...mapGetters('teams', ['userTeams']),
-    
+
     isEditing() {
       return !!this.task
     },
-    
+
     assigneeOptions() {
       const options = [{ text: 'Unassigned', value: null }]
-      
+
       // Get all team members
       const allMembers = new Set()
       this.userTeams.forEach(team => {
@@ -188,7 +188,7 @@ export default {
           allMembers.add(memberId)
         })
       })
-      
+
       // Add team members as options
       allMembers.forEach(memberId => {
         // In a real app, you'd fetch member details
@@ -197,22 +197,22 @@ export default {
           value: memberId
         })
       })
-      
+
       return options
     },
-    
+
     teamOptions() {
       return this.userTeams.map(team => ({
         text: team.name,
         value: team.id
       }))
     },
-    
+
     formattedDueDate() {
       return this.form.dueDate ? new Date(this.form.dueDate).toLocaleDateString() : ''
     }
   },
-  
+
   watch: {
     task: {
       handler(newTask) {
@@ -234,7 +234,7 @@ export default {
       immediate: true
     }
   },
-  
+
   methods: {
     resetForm() {
       this.form = {
@@ -248,19 +248,19 @@ export default {
         estimatedHours: null
       }
     },
-    
+
     async saveTask() {
       if (!this.$refs.form.validate()) return
-      
+
       this.loading = true
       try {
         const taskData = { ...this.form }
-        
+
         // Convert dueDate to proper format
         if (taskData.dueDate) {
           taskData.dueDate = new Date(taskData.dueDate)
         }
-        
+
         this.$emit('save', taskData)
       } catch (error) {
         console.error('Error saving task:', error)
@@ -268,7 +268,7 @@ export default {
         this.loading = false
       }
     },
-    
+
     closeDialog() {
       this.$emit('close')
       this.resetForm()

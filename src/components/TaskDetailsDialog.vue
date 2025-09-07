@@ -18,13 +18,13 @@
           </v-chip>
         </div>
       </v-card-title>
-      
+
       <v-card-text>
         <v-row>
           <v-col cols="12" md="8">
             <h3 class="text-h6 mb-2">Description</h3>
             <p class="text-body-1 mb-4">{{ task.description || 'No description provided' }}</p>
-            
+
             <!-- Comments Section -->
             <h3 class="text-h6 mb-2">Comments</h3>
             <v-list>
@@ -45,7 +45,7 @@
                 </v-list-item-content>
               </v-list-item>
             </v-list>
-            
+
             <!-- Add Comment -->
             <v-textarea
               v-model="newComment"
@@ -61,7 +61,7 @@
               Add Comment
             </v-btn>
           </v-col>
-          
+
           <v-col cols="12" md="4">
             <v-card outlined>
               <v-card-title>Task Details</v-card-title>
@@ -77,7 +77,7 @@
                     {{ task.priority }}
                   </v-chip>
                 </div>
-                
+
                 <div class="mb-3">
                   <strong>Assignee:</strong>
                   <div class="d-flex align-center mt-1">
@@ -88,7 +88,7 @@
                     {{ task.assignee?.displayName || 'Unassigned' }}
                   </div>
                 </div>
-                
+
                 <div class="mb-3" v-if="task.dueDate">
                   <strong>Due Date:</strong>
                   <div class="mt-1">
@@ -102,17 +102,17 @@
                     </v-chip>
                   </div>
                 </div>
-                
+
                 <div class="mb-3" v-if="task.estimatedHours">
                   <strong>Estimated Hours:</strong>
                   <div class="mt-1">{{ task.estimatedHours }} hours</div>
                 </div>
-                
+
                 <div class="mb-3">
                   <strong>Created:</strong>
                   <div class="mt-1">{{ formatDate(task.createdAt) }}</div>
                 </div>
-                
+
                 <div class="mb-3">
                   <strong>Last Updated:</strong>
                   <div class="mt-1">{{ formatDate(task.updatedAt) }}</div>
@@ -122,7 +122,7 @@
           </v-col>
         </v-row>
       </v-card-text>
-      
+
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn
@@ -158,23 +158,23 @@ export default {
       default: null
     }
   },
-  
+
   data() {
     return {
       newComment: ''
     }
   },
-  
+
   computed: {
     isOverdue() {
       if (!this.task?.dueDate) return false
       return new Date(this.task.dueDate) < new Date()
     }
   },
-  
+
   methods: {
     ...mapActions('tasks', ['updateTask']),
-    
+
     getPriorityColor(priority) {
       const colors = {
         low: 'green',
@@ -183,7 +183,7 @@ export default {
       }
       return colors[priority] || 'grey'
     },
-    
+
     getPriorityIcon(priority) {
       const icons = {
         low: 'mdi-arrow-down',
@@ -192,7 +192,7 @@ export default {
       }
       return icons[priority] || 'mdi-minus'
     },
-    
+
     getStatusColor(status) {
       const colors = {
         todo: 'grey',
@@ -202,20 +202,20 @@ export default {
       }
       return colors[status] || 'grey'
     },
-    
+
     formatStatus(status) {
-      return status.split('-').map(word => 
+      return status.split('-').map(word =>
         word.charAt(0).toUpperCase() + word.slice(1)
       ).join(' ')
     },
-    
+
     formatDate(date) {
       return new Date(date).toLocaleString()
     },
-    
+
     async addComment() {
       if (!this.newComment.trim()) return
-      
+
       try {
         const comment = {
           id: Date.now().toString(),
@@ -227,14 +227,14 @@ export default {
           },
           createdAt: new Date()
         }
-        
+
         const updatedComments = [...(this.task.comments || []), comment]
-        
+
         await this.updateTask({
           taskId: this.task.id,
           updates: { comments: updatedComments }
         })
-        
+
         this.newComment = ''
         this.$toast.success('Comment added successfully')
       } catch (error) {

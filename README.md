@@ -281,6 +281,22 @@ For deployment instructions, see [DEPLOYMENT.md](DEPLOYMENT.md).
 
 For contribution guidelines, see [CONTRIBUTING.md](CONTRIBUTING.md).
 
+## Live Demo
+
+🚀 **Try the live demo**: [https://task-management-demo.firebaseapp.com](https://task-management-demo.firebaseapp.com)
+
+### Demo Features
+- **Real-time collaboration** - Open in multiple tabs to see live updates
+- **Drag & drop** - Move tasks between status columns
+- **Team management** - Create teams and invite members
+- **User authentication** - Login with Google or email
+
+### Demo Accounts
+- **Email**: `demo@example.com` | **Password**: `demo123`
+- **Email**: `manager@example.com` | **Password**: `manager123`
+
+For demo setup instructions, see [DEMO_SETUP.md](DEMO_SETUP.md).
+
 ## Support
 
 For support, create an issue in the repository or check the documentation.

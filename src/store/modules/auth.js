@@ -34,12 +34,12 @@ const actions = {
     try {
       commit('SET_LOADING', true)
       commit('CLEAR_ERROR')
-      
+
       const userCredential = await auth.createUserWithEmailAndPassword(email, password)
       const user = userCredential.user
-      
+
       await user.updateProfile({ displayName })
-      
+
       // Create user document in Firestore
       await db.collection('users').doc(user.uid).set({
         uid: user.uid,
@@ -49,7 +49,7 @@ const actions = {
         createdAt: new Date(),
         lastLoginAt: new Date()
       })
-      
+
       commit('SET_USER', user)
       router.push('/')
     } catch (error) {
@@ -64,15 +64,15 @@ const actions = {
     try {
       commit('SET_LOADING', true)
       commit('CLEAR_ERROR')
-      
+
       const userCredential = await auth.signInWithEmailAndPassword(email, password)
       const user = userCredential.user
-      
+
       // Update last login time
       await db.collection('users').doc(user.uid).update({
         lastLoginAt: new Date()
       })
-      
+
       commit('SET_USER', user)
       router.push('/')
     } catch (error) {
@@ -87,11 +87,11 @@ const actions = {
     try {
       commit('SET_LOADING', true)
       commit('CLEAR_ERROR')
-      
+
       const provider = new auth.GoogleAuthProvider()
       const userCredential = await auth.signInWithPopup(provider)
       const user = userCredential.user
-      
+
       // Check if user document exists, create if not
       const userDoc = await db.collection('users').doc(user.uid).get()
       if (!userDoc.exists) {
@@ -108,7 +108,7 @@ const actions = {
           lastLoginAt: new Date()
         })
       }
-      
+
       commit('SET_USER', user)
       router.push('/')
     } catch (error) {

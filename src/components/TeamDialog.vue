@@ -9,7 +9,7 @@
       <v-card-title>
         {{ isEditing ? 'Edit Team' : 'Create Team' }}
       </v-card-title>
-      
+
       <v-card-text>
         <v-form ref="form" v-model="valid">
           <v-text-field
@@ -18,7 +18,7 @@
             :rules="nameRules"
             required
           ></v-text-field>
-          
+
           <v-textarea
             v-model="form.description"
             label="Description"
@@ -26,7 +26,7 @@
           ></v-textarea>
         </v-form>
       </v-card-text>
-      
+
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn
@@ -61,7 +61,7 @@ export default {
       default: null
     }
   },
-  
+
   data() {
     return {
       valid: false,
@@ -76,13 +76,13 @@ export default {
       ]
     }
   },
-  
+
   computed: {
     isEditing() {
       return !!this.team
     }
   },
-  
+
   watch: {
     team: {
       handler(newTeam) {
@@ -98,7 +98,7 @@ export default {
       immediate: true
     }
   },
-  
+
   methods: {
     resetForm() {
       this.form = {
@@ -106,10 +106,10 @@ export default {
         description: ''
       }
     },
-    
+
     async saveTeam() {
       if (!this.$refs.form.validate()) return
-      
+
       this.loading = true
       try {
         this.$emit('save', this.form)
@@ -119,7 +119,7 @@ export default {
         this.loading = false
       }
     },
-    
+
     closeDialog() {
       this.$emit('close')
       this.resetForm()

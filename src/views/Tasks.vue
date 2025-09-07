@@ -72,7 +72,7 @@
               {{ getTasksByStatus(status).length }}
             </v-chip>
           </v-card-title>
-          
+
           <v-card-text class="pa-2">
             <draggable
               :list="getTasksByStatus(status)"
@@ -127,7 +127,7 @@ export default {
     TaskDialog,
     TaskDetailsDialog
   },
-  
+
   data() {
     return {
       showCreateDialog: false,
@@ -154,28 +154,28 @@ export default {
       ]
     }
   },
-  
+
   computed: {
     ...mapGetters('tasks', ['filteredTasks', 'filters']),
     ...mapGetters('teams', ['userTeams']),
-    
+
     tasks() {
       if (!this.searchQuery) return this.filteredTasks
-      
+
       return this.filteredTasks.filter(task =>
         task.title.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
         task.description.toLowerCase().includes(this.searchQuery.toLowerCase())
       )
     }
   },
-  
+
   async mounted() {
     await this.initializeData()
   },
-  
+
   methods: {
     ...mapActions('tasks', ['fetchTasks', 'subscribeToTasks', 'createTask', 'updateTask', 'deleteTask', 'moveTask', 'setFilters']),
-    
+
     async initializeData() {
       try {
         await this.fetchTasks()
@@ -185,11 +185,11 @@ export default {
         this.$toast.error('Failed to load tasks')
       }
     },
-    
+
     getTasksByStatus(status) {
       return this.tasks.filter(task => task.status === status)
     },
-    
+
     getStatusIcon(status) {
       const icons = {
         todo: 'mdi-format-list-checks',
@@ -199,7 +199,7 @@ export default {
       }
       return icons[status] || 'mdi-help'
     },
-    
+
     getStatusColor(status) {
       const colors = {
         todo: 'grey',
@@ -209,13 +209,13 @@ export default {
       }
       return colors[status] || 'grey'
     },
-    
+
     formatStatus(status) {
-      return status.split('-').map(word => 
+      return status.split('-').map(word =>
         word.charAt(0).toUpperCase() + word.slice(1)
       ).join(' ')
     },
-    
+
     async onTaskMove(event, newStatus) {
       if (event.added) {
         const task = event.added.element
@@ -232,17 +232,17 @@ export default {
         }
       }
     },
-    
+
     editTask(task) {
       this.editingTask = task
       this.showCreateDialog = true
     },
-    
+
     viewTask(task) {
       this.selectedTask = task
       this.showDetailsDialog = true
     },
-    
+
     async deleteTask(task) {
       if (confirm('Are you sure you want to delete this task?')) {
         try {
@@ -254,7 +254,7 @@ export default {
         }
       }
     },
-    
+
     async handleTaskSave(taskData) {
       try {
         if (this.editingTask) {
@@ -273,12 +273,12 @@ export default {
         console.error('Error saving task:', error)
       }
     },
-    
+
     closeDialog() {
       this.showCreateDialog = false
       this.editingTask = null
     },
-    
+
     updateFilters() {
       this.setFilters(this.filters)
     }
