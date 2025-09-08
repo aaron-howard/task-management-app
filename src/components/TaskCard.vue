@@ -51,13 +51,13 @@
         <div class="d-flex align-center">
           <v-avatar size="24" class="mr-1">
             <v-img
-              v-if="task.assignee?.photoURL"
-              :src="task.assignee.photoURL"
+              v-if="assigneeUser?.photoURL"
+              :src="assigneeUser.photoURL"
             ></v-img>
             <v-icon v-else small>mdi-account</v-icon>
           </v-avatar>
           <span class="text-caption">
-            {{ task.assignee?.displayName || 'Unassigned' }}
+            {{ assigneeDisplayName }}
           </span>
         </div>
       </div>
@@ -73,6 +73,9 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import { formatDateForChip, isOverdue } from '@/utils/dateUtils'
+
 export default {
   name: 'TaskCard',
   props: {
@@ -83,9 +86,20 @@ export default {
   },
 
   computed: {
+    ...mapGetters('users', ['getUserById', 'getUserDisplayName']),
+
     isOverdue() {
-      if (!this.task.dueDate) return false
-      return new Date(this.task.dueDate) < new Date()
+      return isOverdue(this.task.dueDate)
+    },
+
+    assigneeUser() {
+      if (!this.task.assigneeId) return null
+      return this.getUserById(this.task.assigneeId)
+    },
+
+    assigneeDisplayName() {
+      if (!this.task.assigneeId) return 'Unassigned'
+      return this.getUserDisplayName(this.task.assigneeId)
     }
   },
 
@@ -109,7 +123,7 @@ export default {
     },
 
     formatDate(date) {
-      return new Date(date).toLocaleDateString()
+      return formatDateForChip(date)
     }
   }
 }

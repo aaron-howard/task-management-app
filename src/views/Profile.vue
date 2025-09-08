@@ -132,15 +132,26 @@
         </v-card>
 
         <v-card class="mt-4">
-          <v-card-title>Danger Zone</v-card-title>
+          <v-card-title>Account Actions</v-card-title>
           <v-card-text>
-            <p class="text-body-2 mb-4">
-              Once you delete your account, there is no going back. Please be
-              certain.
-            </p>
-            <v-btn color="error" outlined @click="showDeleteDialog = true">
-              Delete Account
-            </v-btn>
+            <div class="mb-4">
+              <v-btn color="primary" outlined @click="logout" class="mr-3">
+                <v-icon left>mdi-logout</v-icon>
+                Logout
+              </v-btn>
+            </div>
+
+            <v-divider class="my-4"></v-divider>
+
+            <div>
+              <p class="text-body-2 mb-4">
+                Once you delete your account, there is no going back. Please be
+                certain.
+              </p>
+              <v-btn color="error" outlined @click="showDeleteDialog = true">
+                Delete Account
+              </v-btn>
+            </div>
           </v-card-text>
         </v-card>
       </v-col>

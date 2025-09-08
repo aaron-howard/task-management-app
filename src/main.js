@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify'
+import 'vuetify/dist/vuetify.min.css'
 import Toast from 'vue-toastification'
 import 'vue-toastification/dist/index.css'
 
@@ -27,5 +28,9 @@ new Vue({
   router,
   store,
   vuetify,
-  render: h => h(App)
+  render: h => h(App),
+  async created() {
+    // Initialize authentication state
+    await this.$store.dispatch('auth/initAuth')
+  }
 }).$mount('#app')

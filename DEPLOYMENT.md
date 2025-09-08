@@ -321,3 +321,16 @@ Consider integrating:
 - Review Firebase security rules regularly
 - Monitor for security advisories
 - Implement security best practices
+
+## Live Demo
+
+🚀 **Try the live demo**: [https://task-management-app-32eee.web.app](https://task-management-app-32eee.web.app)
+
+### Demo Features
+- **Real-time collaboration** - Open in multiple tabs to see live updates
+- **Drag & drop** - Move tasks between status columns (data preserved)
+- **Team management** - Create teams and invite members
+- **User authentication** - Login with Google, email, or demo login
+- **Dark mode** - Toggle between light and dark themes
+- **Proper date display** - All dates show correctly formatted
+- **User names** - Assignees show proper names instead of IDs

@@ -118,7 +118,8 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
+import { toDate } from '@/utils/dateUtils'
 
 export default {
   name: 'TaskDialog',
@@ -168,6 +169,7 @@ export default {
 
   computed: {
     ...mapGetters('teams', ['userTeams']),
+    ...mapGetters('users', ['getUserDisplayName']),
 
     isEditing() {
       return !!this.task
@@ -184,11 +186,11 @@ export default {
         })
       })
 
-      // Add team members as options
+      // Add team members as options with proper names
       allMembers.forEach(memberId => {
-        // In a real app, you'd fetch member details
+        const displayName = this.getUserDisplayName(memberId)
         options.push({
-          text: `User ${memberId}`,
+          text: displayName,
           value: memberId
         })
       })
@@ -204,9 +206,9 @@ export default {
     },
 
     formattedDueDate() {
-      return this.form.dueDate
-        ? new Date(this.form.dueDate).toLocaleDateString()
-        : ''
+      if (!this.form.dueDate) return ''
+      const dateObj = toDate(this.form.dueDate)
+      return dateObj ? dateObj.toLocaleDateString() : ''
     }
   },
 
@@ -214,6 +216,16 @@ export default {
     task: {
       handler(newTask) {
         if (newTask) {
+          // Convert dueDate to proper format for v-date-picker
+          let formattedDueDate = null
+          if (newTask.dueDate) {
+            const dateObj = toDate(newTask.dueDate)
+            if (dateObj) {
+              // Format as YYYY-MM-DD for v-date-picker
+              formattedDueDate = dateObj.toISOString().split('T')[0]
+            }
+          }
+
           this.form = {
             title: newTask.title || '',
             description: newTask.description || '',
@@ -221,7 +233,7 @@ export default {
             status: newTask.status || 'todo',
             assigneeId: newTask.assigneeId || null,
             teamId: newTask.teamId || null,
-            dueDate: newTask.dueDate || null,
+            dueDate: formattedDueDate,
             estimatedHours: newTask.estimatedHours || null
           }
         } else {
@@ -232,7 +244,27 @@ export default {
     }
   },
 
+  async mounted() {
+    await this.fetchUsers()
+  },
+
   methods: {
+    ...mapActions('users', ['fetchUsers']),
+
+    async fetchUsers() {
+      // Get all unique member IDs from teams
+      const allMemberIds = new Set()
+      this.userTeams.forEach(team => {
+        team.members.forEach(memberId => {
+          allMemberIds.add(memberId)
+        })
+      })
+
+      if (allMemberIds.size > 0) {
+        await this.$store.dispatch('users/fetchUsers', Array.from(allMemberIds))
+      }
+    },
+
     resetForm() {
       this.form = {
         title: '',

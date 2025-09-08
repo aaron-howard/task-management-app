@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import auth from './modules/auth'
 import tasks from './modules/tasks'
 import teams from './modules/teams'
+import users from './modules/users'
 import ui from './modules/ui'
 
 Vue.use(Vuex)
@@ -12,6 +13,7 @@ export default new Vuex.Store({
     auth,
     tasks,
     teams,
+    users,
     ui
   },
   strict: process.env.NODE_ENV !== 'production'

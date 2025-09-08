@@ -130,13 +130,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('teams', [
-      'fetchTeams',
-      'subscribeToTeams',
-      'createTeam',
-      'updateTeam',
-      'deleteTeam'
-    ]),
+    ...mapActions('teams', ['fetchTeams', 'subscribeToTeams']),
 
     async initializeData() {
       try {
@@ -160,7 +154,7 @@ export default {
     async deleteTeam(team) {
       if (confirm(`Are you sure you want to delete the team "${team.name}"?`)) {
         try {
-          await this.deleteTeam(team.id)
+          await this.$store.dispatch('teams/deleteTeam', team.id)
           this.$toast.success('Team deleted successfully')
         } catch (error) {
           this.$toast.error('Failed to delete team')
@@ -179,13 +173,13 @@ export default {
     async handleTeamSave(teamData) {
       try {
         if (this.editingTeam) {
-          await this.updateTeam({
+          await this.$store.dispatch('teams/updateTeam', {
             teamId: this.editingTeam.id,
             updates: teamData
           })
           this.$toast.success('Team updated successfully')
         } else {
-          await this.createTeam(teamData)
+          await this.$store.dispatch('teams/createTeam', teamData)
           this.$toast.success('Team created successfully')
         }
         this.closeDialog()

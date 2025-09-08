@@ -58,7 +58,10 @@ const mutations = {
   UPDATE_TASK(state, updatedTask) {
     const index = state.tasks.findIndex(task => task.id === updatedTask.id)
     if (index !== -1) {
-      state.tasks.splice(index, 1, updatedTask)
+      // Merge the updates with the existing task data to preserve all fields
+      const existingTask = state.tasks[index]
+      const mergedTask = { ...existingTask, ...updatedTask }
+      state.tasks.splice(index, 1, mergedTask)
     }
   },
   DELETE_TASK(state, taskId) {

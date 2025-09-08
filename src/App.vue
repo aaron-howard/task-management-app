@@ -80,6 +80,16 @@
             <v-list-item-title>{{ item.title }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+
+        <!-- Logout button in drawer -->
+        <v-list-item v-if="isAuthenticated" @click="logout">
+          <v-list-item-icon>
+            <v-icon>mdi-logout</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>Logout</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
 
@@ -104,7 +114,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['isAuthenticated', 'user']),
+    ...mapGetters('auth', ['isAuthenticated', 'user']),
     ...mapGetters('ui', ['theme']),
     menuItems() {
       if (!this.isAuthenticated) {
@@ -119,7 +129,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['logout']),
+    ...mapActions('auth', ['logout']),
     ...mapActions('ui', ['toggleTheme'])
   },
   mounted() {

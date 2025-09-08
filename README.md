@@ -5,10 +5,14 @@ A collaborative task management application built with Vue.js, Firebase, Vuex, a
 ## Features
 
 - **Real-time Updates**: Tasks and team changes sync across all users instantly
-- **Drag & Drop**: Move tasks between status columns with smooth animations
+- **Drag & Drop**: Move tasks between status columns with smooth animations (data preserved during moves)
 - **Team Collaboration**: Create teams, invite members, and assign tasks
-- **User Authentication**: Secure login with email/password or Google OAuth
+- **User Authentication**: Secure login with email/password, Google OAuth, or demo login
 - **Task Management**: Create, edit, delete, and organize tasks with priorities and due dates
+- **User Management**: Proper user display names and avatars throughout the application
+- **Date Handling**: Robust date formatting and display across all components
+- **Dark Mode**: Theme switching with proper styling for all components
+- **Logout Functionality**: Multiple logout options (app bar, navigation drawer, profile page)
 - **Responsive Design**: Works on desktop, tablet, and mobile devices
 - **Modern UI**: Built with Vuetify for a clean, material design interface
 
@@ -19,6 +23,8 @@ A collaborative task management application built with Vue.js, Firebase, Vuex, a
 - **Drag & Drop**: Vue Draggable
 - **Real-time**: Firebase Firestore real-time listeners
 - **Notifications**: Vue Toastification
+- **Date Utilities**: Custom date handling for Firestore Timestamps
+- **User Management**: Firebase Users collection with proper display names
 
 ## Prerequisites
 
@@ -123,7 +129,10 @@ src/
 │       ├── auth.js
 │       ├── tasks.js
 │       ├── teams.js
+│       ├── users.js
 │       └── ui.js
+├── utils/              # Utility functions
+│   └── dateUtils.js
 ├── views/              # Page components
 │   ├── Dashboard.vue
 │   ├── Login.vue
@@ -139,26 +148,29 @@ src/
 
 ### Getting Started
 
-1. **Register/Login**: Create an account or sign in with Google
+1. **Register/Login**: Create an account, sign in with Google, or use the demo login
 2. **Create a Team**: Set up your first team and invite members
 3. **Create Tasks**: Add tasks with descriptions, priorities, and due dates
 4. **Collaborate**: Assign tasks to team members and track progress
 5. **Real-time Updates**: See changes from other team members instantly
+6. **Theme Switching**: Toggle between light and dark modes
+7. **Logout**: Use any of the logout options when finished
 
 ### Task Management
 
-- **Create Tasks**: Click "Create Task" to add new tasks
-- **Drag & Drop**: Move tasks between status columns (To Do, In Progress, Review, Done)
+- **Create Tasks**: Click "Create Task" to add new tasks with proper assignee names
+- **Drag & Drop**: Move tasks between status columns (data preserved during moves)
 - **Edit Tasks**: Click the menu icon on any task to edit or delete
 - **View Details**: Click on a task to see full details and add comments
 - **Filter Tasks**: Use the filter options to find specific tasks
+- **Date Display**: All dates show properly formatted (no more "Invalid Date")
 
 ### Team Collaboration
 
 - **Create Teams**: Set up teams for different projects or departments
 - **Invite Members**: Add team members by email address
 - **Manage Members**: Remove members or change team settings
-- **Assign Tasks**: Assign tasks to specific team members
+- **Assign Tasks**: Assign tasks to specific team members (shows proper names, not IDs)
 
 ## Firebase Collections
 
@@ -173,6 +185,8 @@ src/
   lastLoginAt: timestamp
 }
 ```
+
+**Note**: The Users collection is now properly managed with a dedicated Vuex module for fetching and displaying user information throughout the application.
 
 ### Teams Collection
 ```javascript
@@ -283,17 +297,21 @@ For contribution guidelines, see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Live Demo
 
-🚀 **Try the live demo**: [https://task-management-demo.firebaseapp.com](https://task-management-demo.firebaseapp.com)
+🚀 **Try the live demo**: [https://task-management-app-32eee.web.app](https://task-management-app-32eee.web.app)
 
 ### Demo Features
 - **Real-time collaboration** - Open in multiple tabs to see live updates
-- **Drag & drop** - Move tasks between status columns
+- **Drag & drop** - Move tasks between status columns (data preserved)
 - **Team management** - Create teams and invite members
-- **User authentication** - Login with Google or email
+- **User authentication** - Login with Google, email, or demo login
+- **Dark mode** - Toggle between light and dark themes
+- **Proper date display** - All dates show correctly formatted
+- **User names** - Assignees show proper names instead of IDs
 
-### Demo Accounts
-- **Email**: `demo@example.com` | **Password**: `demo123`
-- **Email**: `manager@example.com` | **Password**: `manager123`
+### Demo Login
+- **Demo Login Button** - Click "Demo Login" for instant access
+- **Google Login** - Sign in with your Google account
+- **Email Registration** - Create a new account with email/password
 
 For demo setup instructions, see [DEMO_SETUP.md](DEMO_SETUP.md).
 

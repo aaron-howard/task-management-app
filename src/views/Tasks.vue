@@ -181,8 +181,32 @@ export default {
       try {
         await this.fetchTasks()
         this.subscribeToTasks()
+        await this.fetchUsers()
       } catch (error) {
         this.$toast.error('Failed to load tasks')
+      }
+    },
+
+    async fetchUsers() {
+      // Get all unique member IDs from teams and tasks
+      const allMemberIds = new Set()
+
+      // Add team members
+      this.userTeams.forEach(team => {
+        team.members.forEach(memberId => {
+          allMemberIds.add(memberId)
+        })
+      })
+
+      // Add task assignees
+      this.tasks.forEach(task => {
+        if (task.assigneeId) {
+          allMemberIds.add(task.assigneeId)
+        }
+      })
+
+      if (allMemberIds.size > 0) {
+        await this.$store.dispatch('users/fetchUsers', Array.from(allMemberIds))
       }
     },
 

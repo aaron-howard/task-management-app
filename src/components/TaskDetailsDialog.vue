@@ -42,7 +42,7 @@
                     {{ comment.text }}
                   </v-list-item-subtitle>
                   <v-list-item-subtitle class="text-caption">
-                    {{ formatDate(comment.createdAt) }}
+                    {{ formatDateTime(comment.createdAt) }}
                   </v-list-item-subtitle>
                 </v-list-item-content>
               </v-list-item>
@@ -85,12 +85,12 @@
                   <div class="d-flex align-center mt-1">
                     <v-avatar size="24" class="mr-2">
                       <v-img
-                        v-if="task.assignee?.photoURL"
-                        :src="task.assignee.photoURL"
+                        v-if="assigneeUser?.photoURL"
+                        :src="assigneeUser.photoURL"
                       ></v-img>
                       <v-icon v-else small>mdi-account</v-icon>
                     </v-avatar>
-                    {{ task.assignee?.displayName || 'Unassigned' }}
+                    {{ assigneeDisplayName }}
                   </div>
                 </div>
 
@@ -115,12 +115,12 @@
 
                 <div class="mb-3">
                   <strong>Created:</strong>
-                  <div class="mt-1">{{ formatDate(task.createdAt) }}</div>
+                  <div class="mt-1">{{ formatDateTime(task.createdAt) }}</div>
                 </div>
 
                 <div class="mb-3">
                   <strong>Last Updated:</strong>
-                  <div class="mt-1">{{ formatDate(task.updatedAt) }}</div>
+                  <div class="mt-1">{{ formatDateTime(task.updatedAt) }}</div>
                 </div>
               </v-card-text>
             </v-card>
@@ -141,7 +141,8 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
+import { formatDate, formatDateTime, isOverdue } from '@/utils/dateUtils'
 
 export default {
   name: 'TaskDetailsDialog',
@@ -163,9 +164,20 @@ export default {
   },
 
   computed: {
+    ...mapGetters('users', ['getUserById', 'getUserDisplayName']),
+
     isOverdue() {
-      if (!this.task?.dueDate) return false
-      return new Date(this.task.dueDate) < new Date()
+      return isOverdue(this.task?.dueDate)
+    },
+
+    assigneeUser() {
+      if (!this.task?.assigneeId) return null
+      return this.getUserById(this.task.assigneeId)
+    },
+
+    assigneeDisplayName() {
+      if (!this.task?.assigneeId) return 'Unassigned'
+      return this.getUserDisplayName(this.task.assigneeId)
     }
   },
 
@@ -208,7 +220,11 @@ export default {
     },
 
     formatDate(date) {
-      return new Date(date).toLocaleString()
+      return formatDate(date)
+    },
+
+    formatDateTime(date) {
+      return formatDateTime(date)
     },
 
     async addComment() {

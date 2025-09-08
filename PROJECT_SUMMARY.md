@@ -12,10 +12,11 @@ A comprehensive collaborative task management application built with modern web 
 - Instant synchronization of changes
 
 ### ✅ **Task Management**
-- Kanban board with drag-and-drop
+- Kanban board with drag-and-drop (data preserved during moves)
 - Task creation, editing, and deletion
-- Priority levels and due dates
+- Priority levels and due dates (properly formatted)
 - Status tracking (To Do, In Progress, Review, Done)
+- Assignee management with proper user names
 
 ### ✅ **Team Collaboration**
 - Team creation and management
@@ -26,14 +27,18 @@ A comprehensive collaborative task management application built with modern web 
 ### ✅ **User Authentication**
 - Email/password authentication
 - Google OAuth integration
+- Demo login functionality
 - Secure user management
 - Profile management
+- Multiple logout options
 
 ### ✅ **Modern UI/UX**
 - Material Design with Vuetify
 - Responsive design for all devices
 - Intuitive navigation
 - Toast notifications
+- Dark mode theme switching
+- Proper date formatting throughout
 
 ## 🛠️ Technology Stack
 
@@ -52,6 +57,7 @@ A comprehensive collaborative task management application built with modern web 
 
 ### Development Tools
 - **ESLint** - Code linting
+- **Prettier** - Code formatting
 - **Husky** - Git hooks
 - **Lint-staged** - Pre-commit linting
 - **GitHub Actions** - CI/CD pipeline
@@ -80,7 +86,10 @@ task-management-app/
 │   │       ├── auth.js
 │   │       ├── tasks.js
 │   │       ├── teams.js
+│   │       ├── users.js
 │   │       └── ui.js
+│   ├── utils/              # Utility functions
+│   │   └── dateUtils.js
 │   ├── router/             # Vue Router configuration
 │   │   └── index.js
 │   ├── firebase/           # Firebase configuration
@@ -282,6 +291,15 @@ npm test              # Run unit tests
 - **Testing**: Unit and integration testing setup
 
 ## 🚀 Future Enhancements
+
+### Recently Completed Features
+- [x] Dark mode theme switching
+- [x] Proper user name display (instead of IDs)
+- [x] Date formatting fixes (no more "Invalid Date")
+- [x] Drag-and-drop data preservation
+- [x] Multiple logout options
+- [x] Demo login functionality
+- [x] Prettier code formatting
 
 ### Planned Features
 - [ ] File attachments for tasks

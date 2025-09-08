@@ -97,7 +97,7 @@ const actions = {
       const docRef = await db.collection('teams').add(team)
       const newTeam = { id: docRef.id, ...team }
 
-      commit('ADD_TEAM', newTeam)
+      // Don't manually add to state - let the subscription handle it
       return newTeam
     } catch (error) {
       commit('SET_ERROR', error.message)
@@ -117,9 +117,8 @@ const actions = {
           updatedAt: new Date()
         })
 
-      const updatedTeam = { id: teamId, ...updates }
-      commit('UPDATE_TEAM', updatedTeam)
-      return updatedTeam
+      // Don't manually update state - let the subscription handle it
+      return { id: teamId, ...updates }
     } catch (error) {
       commit('SET_ERROR', error.message)
       throw error
@@ -131,7 +130,7 @@ const actions = {
       commit('CLEAR_ERROR')
 
       await db.collection('teams').doc(teamId).delete()
-      commit('DELETE_TEAM', teamId)
+      // Don't manually remove from state - let the subscription handle it
     } catch (error) {
       commit('SET_ERROR', error.message)
       throw error
