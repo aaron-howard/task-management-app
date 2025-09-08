@@ -1,19 +1,12 @@
 <template>
-  <v-dialog
-    :value="value"
-    @input="$emit('input', $event)"
-    max-width="800"
-  >
+  <v-dialog :value="value" @input="$emit('input', $event)" max-width="800">
     <v-card v-if="task">
       <v-card-title>
         <div class="d-flex align-center">
           <v-icon left>{{ getPriorityIcon(task.priority) }}</v-icon>
           {{ task.title }}
           <v-spacer></v-spacer>
-          <v-chip
-            :color="getStatusColor(task.status)"
-            text-color="white"
-          >
+          <v-chip :color="getStatusColor(task.status)" text-color="white">
             {{ formatStatus(task.status) }}
           </v-chip>
         </div>
@@ -23,7 +16,9 @@
         <v-row>
           <v-col cols="12" md="8">
             <h3 class="text-h6 mb-2">Description</h3>
-            <p class="text-body-1 mb-4">{{ task.description || 'No description provided' }}</p>
+            <p class="text-body-1 mb-4">
+              {{ task.description || 'No description provided' }}
+            </p>
 
             <!-- Comments Section -->
             <h3 class="text-h6 mb-2">Comments</h3>
@@ -33,12 +28,19 @@
                 :key="comment.id"
               >
                 <v-list-item-avatar>
-                  <v-img v-if="comment.author?.photoURL" :src="comment.author.photoURL"></v-img>
+                  <v-img
+                    v-if="comment.author?.photoURL"
+                    :src="comment.author.photoURL"
+                  ></v-img>
                   <v-icon v-else>mdi-account</v-icon>
                 </v-list-item-avatar>
                 <v-list-item-content>
-                  <v-list-item-title>{{ comment.author?.displayName || 'Unknown User' }}</v-list-item-title>
-                  <v-list-item-subtitle>{{ comment.text }}</v-list-item-subtitle>
+                  <v-list-item-title>
+                    {{ comment.author?.displayName || 'Unknown User' }}
+                  </v-list-item-title>
+                  <v-list-item-subtitle>
+                    {{ comment.text }}
+                  </v-list-item-subtitle>
                   <v-list-item-subtitle class="text-caption">
                     {{ formatDate(comment.createdAt) }}
                   </v-list-item-subtitle>
@@ -82,7 +84,10 @@
                   <strong>Assignee:</strong>
                   <div class="d-flex align-center mt-1">
                     <v-avatar size="24" class="mr-2">
-                      <v-img v-if="task.assignee?.photoURL" :src="task.assignee.photoURL"></v-img>
+                      <v-img
+                        v-if="task.assignee?.photoURL"
+                        :src="task.assignee.photoURL"
+                      ></v-img>
                       <v-icon v-else small>mdi-account</v-icon>
                     </v-avatar>
                     {{ task.assignee?.displayName || 'Unassigned' }}
@@ -125,16 +130,8 @@
 
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn
-          text
-          @click="$emit('input', false)"
-        >
-          Close
-        </v-btn>
-        <v-btn
-          color="primary"
-          @click="$emit('edit', task)"
-        >
+        <v-btn text @click="$emit('input', false)">Close</v-btn>
+        <v-btn color="primary" @click="$emit('edit', task)">
           <v-icon left>mdi-pencil</v-icon>
           Edit
         </v-btn>
@@ -204,9 +201,10 @@ export default {
     },
 
     formatStatus(status) {
-      return status.split('-').map(word =>
-        word.charAt(0).toUpperCase() + word.slice(1)
-      ).join(' ')
+      return status
+        .split('-')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ')
     },
 
     formatDate(date) {
@@ -239,7 +237,6 @@ export default {
         this.$toast.success('Comment added successfully')
       } catch (error) {
         this.$toast.error('Failed to add comment')
-        console.error('Error adding comment:', error)
       }
     }
   }

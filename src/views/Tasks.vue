@@ -4,10 +4,7 @@
       <v-col cols="12">
         <div class="d-flex justify-space-between align-center mb-4">
           <h1 class="text-h4">Tasks</h1>
-          <v-btn
-            color="primary"
-            @click="showCreateDialog = true"
-          >
+          <v-btn color="primary" @click="showCreateDialog = true">
             <v-icon left>mdi-plus</v-icon>
             Create Task
           </v-btn>
@@ -53,12 +50,7 @@
 
     <!-- Kanban Board -->
     <v-row>
-      <v-col
-        v-for="status in statuses"
-        :key="status"
-        cols="12"
-        md="3"
-      >
+      <v-col v-for="status in statuses" :key="status" cols="12" md="3">
         <v-card class="kanban-column" height="600">
           <v-card-title class="text-center">
             <v-icon left>{{ getStatusIcon(status) }}</v-icon>
@@ -149,9 +141,7 @@ export default {
         { text: 'Medium', value: 'medium' },
         { text: 'High', value: 'high' }
       ],
-      assigneeOptions: [
-        { text: 'All Assignees', value: 'all' }
-      ]
+      assigneeOptions: [{ text: 'All Assignees', value: 'all' }]
     }
   },
 
@@ -162,9 +152,12 @@ export default {
     tasks() {
       if (!this.searchQuery) return this.filteredTasks
 
-      return this.filteredTasks.filter(task =>
-        task.title.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-        task.description.toLowerCase().includes(this.searchQuery.toLowerCase())
+      return this.filteredTasks.filter(
+        task =>
+          task.title.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+          task.description
+            .toLowerCase()
+            .includes(this.searchQuery.toLowerCase())
       )
     }
   },
@@ -174,14 +167,21 @@ export default {
   },
 
   methods: {
-    ...mapActions('tasks', ['fetchTasks', 'subscribeToTasks', 'createTask', 'updateTask', 'deleteTask', 'moveTask', 'setFilters']),
+    ...mapActions('tasks', [
+      'fetchTasks',
+      'subscribeToTasks',
+      'createTask',
+      'updateTask',
+      'deleteTask',
+      'moveTask',
+      'setFilters'
+    ]),
 
     async initializeData() {
       try {
         await this.fetchTasks()
         this.subscribeToTasks()
       } catch (error) {
-        console.error('Error initializing tasks:', error)
         this.$toast.error('Failed to load tasks')
       }
     },
@@ -211,9 +211,10 @@ export default {
     },
 
     formatStatus(status) {
-      return status.split('-').map(word =>
-        word.charAt(0).toUpperCase() + word.slice(1)
-      ).join(' ')
+      return status
+        .split('-')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ')
     },
 
     async onTaskMove(event, newStatus) {
@@ -228,7 +229,6 @@ export default {
           this.$toast.success('Task moved successfully')
         } catch (error) {
           this.$toast.error('Failed to move task')
-          console.error('Error moving task:', error)
         }
       }
     },
@@ -250,7 +250,6 @@ export default {
           this.$toast.success('Task deleted successfully')
         } catch (error) {
           this.$toast.error('Failed to delete task')
-          console.error('Error deleting task:', error)
         }
       }
     },
@@ -270,7 +269,6 @@ export default {
         this.closeDialog()
       } catch (error) {
         this.$toast.error('Failed to save task')
-        console.error('Error saving task:', error)
       }
     },
 

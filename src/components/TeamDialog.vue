@@ -29,12 +29,7 @@
 
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn
-          text
-          @click="closeDialog"
-        >
-          Cancel
-        </v-btn>
+        <v-btn text @click="closeDialog">Cancel</v-btn>
         <v-btn
           color="primary"
           :disabled="!valid"
@@ -114,7 +109,7 @@ export default {
       try {
         this.$emit('save', this.form)
       } catch (error) {
-        console.error('Error saving team:', error)
+        // Error handling is done by parent component
       } finally {
         this.loading = false
       }

@@ -16,8 +16,8 @@ const getters = {
     const userId = rootGetters['auth/user']?.uid
     if (!userId) return []
 
-    return state.teams.filter(team =>
-      team.members.includes(userId) || team.createdBy === userId
+    return state.teams.filter(
+      team => team.members.includes(userId) || team.createdBy === userId
     )
   }
 }
@@ -61,7 +61,8 @@ const actions = {
       const userId = rootGetters['auth/user']?.uid
       if (!userId) return
 
-      const snapshot = await db.collection('teams')
+      const snapshot = await db
+        .collection('teams')
         .where('members', 'array-contains', userId)
         .get()
 
@@ -73,7 +74,6 @@ const actions = {
       commit('SET_TEAMS', teams)
     } catch (error) {
       commit('SET_ERROR', error.message)
-      console.error('Error fetching teams:', error)
     } finally {
       commit('SET_LOADING', false)
     }
@@ -109,10 +109,13 @@ const actions = {
     try {
       commit('CLEAR_ERROR')
 
-      await db.collection('teams').doc(teamId).update({
-        ...updates,
-        updatedAt: new Date()
-      })
+      await db
+        .collection('teams')
+        .doc(teamId)
+        .update({
+          ...updates,
+          updatedAt: new Date()
+        })
 
       const updatedTeam = { id: teamId, ...updates }
       commit('UPDATE_TEAM', updatedTeam)
@@ -140,7 +143,8 @@ const actions = {
       commit('CLEAR_ERROR')
 
       // Find user by email
-      const usersSnapshot = await db.collection('users')
+      const usersSnapshot = await db
+        .collection('users')
         .where('email', '==', memberEmail)
         .get()
 
@@ -160,10 +164,13 @@ const actions = {
       }
 
       // Add user to team
-      await db.collection('teams').doc(teamId).update({
-        members: [...teamData.members, userId],
-        updatedAt: new Date()
-      })
+      await db
+        .collection('teams')
+        .doc(teamId)
+        .update({
+          members: [...teamData.members, userId],
+          updatedAt: new Date()
+        })
 
       // Refresh teams
       await dispatch('fetchTeams')
@@ -205,18 +212,21 @@ const actions = {
     const userId = rootGetters['auth/user']?.uid
     if (!userId) return
 
-    return db.collection('teams')
+    return db
+      .collection('teams')
       .where('members', 'array-contains', userId)
-      .onSnapshot(snapshot => {
-        const teams = snapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        }))
-        commit('SET_TEAMS', teams)
-      }, error => {
-        commit('SET_ERROR', error.message)
-        console.error('Error in teams subscription:', error)
-      })
+      .onSnapshot(
+        snapshot => {
+          const teams = snapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+          }))
+          commit('SET_TEAMS', teams)
+        },
+        error => {
+          commit('SET_ERROR', error.message)
+        }
+      )
   }
 }
 

@@ -103,12 +103,7 @@
 
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn
-          text
-          @click="closeDialog"
-        >
-          Cancel
-        </v-btn>
+        <v-btn text @click="closeDialog">Cancel</v-btn>
         <v-btn
           color="primary"
           :disabled="!valid"
@@ -209,7 +204,9 @@ export default {
     },
 
     formattedDueDate() {
-      return this.form.dueDate ? new Date(this.form.dueDate).toLocaleDateString() : ''
+      return this.form.dueDate
+        ? new Date(this.form.dueDate).toLocaleDateString()
+        : ''
     }
   },
 
@@ -263,7 +260,7 @@ export default {
 
         this.$emit('save', taskData)
       } catch (error) {
-        console.error('Error saving task:', error)
+        // Error handling is done by parent component
       } finally {
         this.loading = false
       }

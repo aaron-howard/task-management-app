@@ -9,13 +9,7 @@
         <h4 class="text-subtitle-1 font-weight-medium">{{ task.title }}</h4>
         <v-menu>
           <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              icon
-              small
-              v-bind="attrs"
-              v-on="on"
-              @click.stop
-            >
+            <v-btn icon small v-bind="attrs" v-on="on" @click.stop>
               <v-icon>mdi-dots-vertical</v-icon>
             </v-btn>
           </template>
@@ -56,19 +50,20 @@
 
         <div class="d-flex align-center">
           <v-avatar size="24" class="mr-1">
-            <v-img v-if="task.assignee?.photoURL" :src="task.assignee.photoURL"></v-img>
+            <v-img
+              v-if="task.assignee?.photoURL"
+              :src="task.assignee.photoURL"
+            ></v-img>
             <v-icon v-else small>mdi-account</v-icon>
           </v-avatar>
-          <span class="text-caption">{{ task.assignee?.displayName || 'Unassigned' }}</span>
+          <span class="text-caption">
+            {{ task.assignee?.displayName || 'Unassigned' }}
+          </span>
         </div>
       </div>
 
       <div v-if="task.dueDate" class="mt-2">
-        <v-chip
-          :color="isOverdue ? 'error' : 'grey'"
-          small
-          text-color="white"
-        >
+        <v-chip :color="isOverdue ? 'error' : 'grey'" small text-color="white">
           <v-icon left small>mdi-calendar</v-icon>
           {{ formatDate(task.dueDate) }}
         </v-chip>
@@ -128,7 +123,7 @@ export default {
 
 .task-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.12);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
 }
 
 .priority-high {

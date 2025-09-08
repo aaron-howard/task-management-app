@@ -40,13 +40,34 @@
 
             <div class="mb-3">
               <strong>Last Login:</strong>
-              <div class="text-caption">{{ formatDate(user.metadata?.lastSignInTime) }}</div>
+              <div class="text-caption">
+                {{ formatDate(user.metadata?.lastSignInTime) }}
+              </div>
             </div>
 
             <div class="mb-3">
               <strong>Account Created:</strong>
-              <div class="text-caption">{{ formatDate(user.metadata?.creationTime) }}</div>
+              <div class="text-caption">
+                {{ formatDate(user.metadata?.creationTime) }}
+              </div>
             </div>
+          </v-card-text>
+        </v-card>
+
+        <!-- Theme Settings -->
+        <v-card class="mt-4">
+          <v-card-title>Theme Settings</v-card-title>
+          <v-card-text>
+            <v-switch
+              v-model="isDarkMode"
+              :label="isDarkMode ? 'Dark Mode' : 'Light Mode'"
+              @change="toggleTheme"
+              color="primary"
+            ></v-switch>
+            <p class="text-caption text--secondary mt-2">
+              Choose your preferred theme. Your selection will be saved
+              automatically.
+            </p>
           </v-card-text>
         </v-card>
       </v-col>
@@ -114,13 +135,10 @@
           <v-card-title>Danger Zone</v-card-title>
           <v-card-text>
             <p class="text-body-2 mb-4">
-              Once you delete your account, there is no going back. Please be certain.
+              Once you delete your account, there is no going back. Please be
+              certain.
             </p>
-            <v-btn
-              color="error"
-              outlined
-              @click="showDeleteDialog = true"
-            >
+            <v-btn color="error" outlined @click="showDeleteDialog = true">
               Delete Account
             </v-btn>
           </v-card-text>
@@ -133,7 +151,10 @@
       <v-card>
         <v-card-title>Delete Account</v-card-title>
         <v-card-text>
-          <p>Are you sure you want to delete your account? This action cannot be undone.</p>
+          <p>
+            Are you sure you want to delete your account? This action cannot be
+            undone.
+          </p>
           <v-text-field
             v-model="deleteConfirmation"
             label="Type 'DELETE' to confirm"
@@ -193,7 +214,16 @@ export default {
   },
 
   computed: {
-    ...mapGetters('auth', ['user'])
+    ...mapGetters('auth', ['user']),
+    ...mapGetters('ui', ['theme']),
+    isDarkMode: {
+      get() {
+        return this.theme === 'dark'
+      },
+      set(value) {
+        // This will be handled by the @change event
+      }
+    }
   },
 
   watch: {
@@ -210,6 +240,7 @@ export default {
 
   methods: {
     ...mapActions('auth', ['logout']),
+    ...mapActions('ui', ['toggleTheme']),
 
     async updateProfile() {
       if (!this.$refs.form.validate()) return
@@ -246,7 +277,6 @@ export default {
         this.resetForm()
       } catch (error) {
         this.$toast.error('Failed to update profile: ' + error.message)
-        console.error('Error updating profile:', error)
       } finally {
         this.loading = false
       }
@@ -263,7 +293,6 @@ export default {
         await this.logout()
       } catch (error) {
         this.$toast.error('Failed to delete account: ' + error.message)
-        console.error('Error deleting account:', error)
       }
     },
 

@@ -1,9 +1,5 @@
 <template>
-  <v-dialog
-    :value="value"
-    @input="$emit('input', $event)"
-    max-width="600"
-  >
+  <v-dialog :value="value" @input="$emit('input', $event)" max-width="600">
     <v-card v-if="team">
       <v-card-title>
         <v-icon left>mdi-account-multiple</v-icon>
@@ -36,10 +32,7 @@
         <!-- Current Members -->
         <h3 class="text-h6 mb-3">Current Members</h3>
         <v-list>
-          <v-list-item
-            v-for="memberId in team.members"
-            :key="memberId"
-          >
+          <v-list-item v-for="memberId in team.members" :key="memberId">
             <v-list-item-avatar>
               <v-icon>mdi-account</v-icon>
             </v-list-item-avatar>
@@ -77,18 +70,8 @@
 
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn
-          text
-          @click="$emit('input', false)"
-        >
-          Close
-        </v-btn>
-        <v-btn
-          color="primary"
-          @click="$emit('save')"
-        >
-          Save Changes
-        </v-btn>
+        <v-btn text @click="$emit('input', false)">Close</v-btn>
+        <v-btn color="primary" @click="$emit('save')">Save Changes</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>

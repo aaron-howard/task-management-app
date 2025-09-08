@@ -35,7 +35,10 @@ const actions = {
       commit('SET_LOADING', true)
       commit('CLEAR_ERROR')
 
-      const userCredential = await auth.createUserWithEmailAndPassword(email, password)
+      const userCredential = await auth.createUserWithEmailAndPassword(
+        email,
+        password
+      )
       const user = userCredential.user
 
       await user.updateProfile({ displayName })
@@ -65,7 +68,10 @@ const actions = {
       commit('SET_LOADING', true)
       commit('CLEAR_ERROR')
 
-      const userCredential = await auth.signInWithEmailAndPassword(email, password)
+      const userCredential = await auth.signInWithEmailAndPassword(
+        email,
+        password
+      )
       const user = userCredential.user
 
       // Update last login time
@@ -131,7 +137,7 @@ const actions = {
   },
 
   async initAuth({ commit }) {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       auth.onAuthStateChanged(user => {
         commit('SET_USER', user)
         resolve(user)

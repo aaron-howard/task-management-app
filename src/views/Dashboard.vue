@@ -3,7 +3,9 @@
     <v-row>
       <v-col cols="12">
         <h1 class="text-h4 mb-4">Dashboard</h1>
-        <p class="text-h6 mb-6">Welcome back, {{ user.displayName || user.email }}!</p>
+        <p class="text-h6 mb-6">
+          Welcome back, {{ user.displayName || user.email }}!
+        </p>
       </v-col>
     </v-row>
 
@@ -162,9 +164,7 @@ export default {
     },
 
     recentTasks() {
-      return this.tasks
-        .filter(task => task.status !== 'done')
-        .slice(0, 5)
+      return this.tasks.filter(task => task.status !== 'done').slice(0, 5)
     }
   },
 
@@ -178,16 +178,12 @@ export default {
 
     async initializeData() {
       try {
-        await Promise.all([
-          this.fetchTasks(),
-          this.fetchTeams()
-        ])
+        await Promise.all([this.fetchTasks(), this.fetchTeams()])
 
         // Set up real-time subscriptions
         this.subscribeToTasks()
         this.subscribeToTeams()
       } catch (error) {
-        console.error('Error initializing dashboard data:', error)
         this.$toast.error('Failed to load dashboard data')
       }
     },

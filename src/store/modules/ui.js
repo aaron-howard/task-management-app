@@ -1,6 +1,6 @@
 const state = {
   sidebar: true,
-  theme: 'light',
+  theme: localStorage.getItem('theme') || 'light',
   notifications: [],
   loading: false
 }
@@ -21,6 +21,7 @@ const mutations = {
   },
   SET_THEME(state, theme) {
     state.theme = theme
+    localStorage.setItem('theme', theme)
   },
   ADD_NOTIFICATION(state, notification) {
     state.notifications.push({
@@ -29,7 +30,9 @@ const mutations = {
     })
   },
   REMOVE_NOTIFICATION(state, notificationId) {
-    state.notifications = state.notifications.filter(n => n.id !== notificationId)
+    state.notifications = state.notifications.filter(
+      n => n.id !== notificationId
+    )
   },
   SET_LOADING(state, loading) {
     state.loading = loading
@@ -45,6 +48,10 @@ const actions = {
   },
   setTheme({ commit }, theme) {
     commit('SET_THEME', theme)
+  },
+  toggleTheme({ commit, state }) {
+    const newTheme = state.theme === 'light' ? 'dark' : 'light'
+    commit('SET_THEME', newTheme)
   },
   addNotification({ commit }, notification) {
     commit('ADD_NOTIFICATION', notification)

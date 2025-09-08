@@ -28,11 +28,17 @@ const app = initializeApp(firebaseConfig)
 const analytics = getAnalytics(app)
 
 // Enable offline persistence
-db.enablePersistence().catch((err) => {
+db.enablePersistence().catch(err => {
   if (err.code === 'failed-precondition') {
-    console.warn('Multiple tabs open, persistence can only be enabled in one tab at a time.')
+    // eslint-disable-next-line no-console
+    console.warn(
+      'Multiple tabs open, persistence can only be enabled in one tab at a time.'
+    )
   } else if (err.code === 'unimplemented') {
-    console.warn('The current browser does not support all features required for persistence')
+    // eslint-disable-next-line no-console
+    console.warn(
+      'The current browser does not support all features required for persistence'
+    )
   }
 })
 

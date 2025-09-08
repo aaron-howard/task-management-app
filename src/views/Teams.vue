@@ -4,10 +4,7 @@
       <v-col cols="12">
         <div class="d-flex justify-space-between align-center mb-4">
           <h1 class="text-h4">Teams</h1>
-          <v-btn
-            color="primary"
-            @click="showCreateDialog = true"
-          >
+          <v-btn color="primary" @click="showCreateDialog = true">
             <v-icon left>mdi-plus</v-icon>
             Create Team
           </v-btn>
@@ -16,13 +13,7 @@
     </v-row>
 
     <v-row>
-      <v-col
-        v-for="team in userTeams"
-        :key="team.id"
-        cols="12"
-        md="6"
-        lg="4"
-      >
+      <v-col v-for="team in userTeams" :key="team.id" cols="12" md="6" lg="4">
         <v-card class="team-card" height="200">
           <v-card-title>
             <div class="d-flex align-center">
@@ -32,12 +23,7 @@
             <v-spacer></v-spacer>
             <v-menu>
               <template v-slot:activator="{ on, attrs }">
-                <v-btn
-                  icon
-                  small
-                  v-bind="attrs"
-                  v-on="on"
-                >
+                <v-btn icon small v-bind="attrs" v-on="on">
                   <v-icon>mdi-dots-vertical</v-icon>
                 </v-btn>
               </template>
@@ -65,35 +51,31 @@
           </v-card-title>
 
           <v-card-text>
-            <p class="text-body-2 mb-3">{{ team.description || 'No description provided' }}</p>
+            <p class="text-body-2 mb-3">
+              {{ team.description || 'No description provided' }}
+            </p>
 
             <div class="d-flex align-center mb-2">
               <v-icon small class="mr-2">mdi-account-multiple</v-icon>
-              <span class="text-caption">{{ team.members.length }} members</span>
+              <span class="text-caption">
+                {{ team.members.length }} members
+              </span>
             </div>
 
             <div class="d-flex align-center">
               <v-icon small class="mr-2">mdi-calendar</v-icon>
-              <span class="text-caption">Created {{ formatDate(team.createdAt) }}</span>
+              <span class="text-caption">
+                Created {{ formatDate(team.createdAt) }}
+              </span>
             </div>
           </v-card-text>
 
           <v-card-actions>
-            <v-btn
-              text
-              color="primary"
-              @click="viewTeamTasks(team)"
-            >
+            <v-btn text color="primary" @click="viewTeamTasks(team)">
               View Tasks
             </v-btn>
             <v-spacer></v-spacer>
-            <v-btn
-              text
-              color="primary"
-              @click="editTeam(team)"
-            >
-              Manage
-            </v-btn>
+            <v-btn text color="primary" @click="editTeam(team)">Manage</v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
@@ -148,14 +130,19 @@ export default {
   },
 
   methods: {
-    ...mapActions('teams', ['fetchTeams', 'subscribeToTeams', 'createTeam', 'updateTeam', 'deleteTeam']),
+    ...mapActions('teams', [
+      'fetchTeams',
+      'subscribeToTeams',
+      'createTeam',
+      'updateTeam',
+      'deleteTeam'
+    ]),
 
     async initializeData() {
       try {
         await this.fetchTeams()
         this.subscribeToTeams()
       } catch (error) {
-        console.error('Error initializing teams:', error)
         this.$toast.error('Failed to load teams')
       }
     },
@@ -177,7 +164,6 @@ export default {
           this.$toast.success('Team deleted successfully')
         } catch (error) {
           this.$toast.error('Failed to delete team')
-          console.error('Error deleting team:', error)
         }
       }
     },
@@ -205,7 +191,6 @@ export default {
         this.closeDialog()
       } catch (error) {
         this.$toast.error('Failed to save team')
-        console.error('Error saving team:', error)
       }
     },
 
@@ -217,7 +202,6 @@ export default {
         this.closeMembersDialog()
       } catch (error) {
         this.$toast.error('Failed to update members')
-        console.error('Error updating members:', error)
       }
     },
 
@@ -245,6 +229,6 @@ export default {
 
 .team-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.12);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
 }
 </style>

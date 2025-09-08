@@ -24,14 +24,20 @@ const getters = {
     }
 
     if (state.filters.assignee !== 'all') {
-      filtered = filtered.filter(task => task.assigneeId === state.filters.assignee)
+      filtered = filtered.filter(
+        task => task.assigneeId === state.filters.assignee
+      )
     }
 
     if (state.filters.priority !== 'all') {
-      filtered = filtered.filter(task => task.priority === state.filters.priority)
+      filtered = filtered.filter(
+        task => task.priority === state.filters.priority
+      )
     }
 
-    return filtered.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    return filtered.sort(
+      (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+    )
   },
   tasksByStatus: state => {
     const statuses = ['todo', 'in-progress', 'review', 'done']
@@ -81,7 +87,8 @@ const actions = {
       const userId = rootGetters['auth/user']?.uid
       if (!userId) return
 
-      const snapshot = await db.collection('tasks')
+      const snapshot = await db
+        .collection('tasks')
         .where('teamId', 'in', await getTeamIds(userId))
         .orderBy('createdAt', 'desc')
         .get()
@@ -94,7 +101,6 @@ const actions = {
       commit('SET_TASKS', tasks)
     } catch (error) {
       commit('SET_ERROR', error.message)
-      console.error('Error fetching tasks:', error)
     } finally {
       commit('SET_LOADING', false)
     }
@@ -131,10 +137,13 @@ const actions = {
     try {
       commit('CLEAR_ERROR')
 
-      await db.collection('tasks').doc(taskId).update({
-        ...updates,
-        updatedAt: new Date()
-      })
+      await db
+        .collection('tasks')
+        .doc(taskId)
+        .update({
+          ...updates,
+          updatedAt: new Date()
+        })
 
       const updatedTask = { id: taskId, ...updates }
       commit('UPDATE_TASK', updatedTask)
@@ -187,25 +196,29 @@ const actions = {
 
     const teamIds = await getTeamIds(userId)
 
-    return db.collection('tasks')
+    return db
+      .collection('tasks')
       .where('teamId', 'in', teamIds)
       .orderBy('createdAt', 'desc')
-      .onSnapshot(snapshot => {
-        const tasks = snapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        }))
-        commit('SET_TASKS', tasks)
-      }, error => {
-        commit('SET_ERROR', error.message)
-        console.error('Error in tasks subscription:', error)
-      })
+      .onSnapshot(
+        snapshot => {
+          const tasks = snapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+          }))
+          commit('SET_TASKS', tasks)
+        },
+        error => {
+          commit('SET_ERROR', error.message)
+        }
+      )
   }
 }
 
 // Helper function to get team IDs for a user
 async function getTeamIds(userId) {
-  const userTeamsSnapshot = await db.collection('teams')
+  const userTeamsSnapshot = await db
+    .collection('teams')
     .where('members', 'array-contains', userId)
     .get()
 
