@@ -132,7 +132,7 @@ Set in Vercel dashboard:
    [build]
      publish = "dist"
      command = "npm run build"
-   
+
    [[redirects]]
      from = "/*"
      to = "/index.html"
@@ -167,11 +167,11 @@ Set in Netlify dashboard:
    Create `.github/workflows/deploy-pages.yml`:
    ```yaml
    name: Deploy to GitHub Pages
-   
+
    on:
      push:
        branches: [ main ]
-   
+
    jobs:
      deploy:
        runs-on: ubuntu-latest

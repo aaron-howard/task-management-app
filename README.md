@@ -44,7 +44,7 @@ A collaborative task management application built with Vue.js, Firebase, Vuex, a
    ```bash
    # On Windows
    setup.bat
-   
+
    # On macOS/Linux
    ./setup.sh
    ```
@@ -83,16 +83,16 @@ A collaborative task management application built with Vue.js, Firebase, Vuex, a
        match /users/{userId} {
          allow read, write: if request.auth != null && request.auth.uid == userId;
        }
-       
+
        // Team members can read/write team documents
        match /teams/{teamId} {
-         allow read, write: if request.auth != null && 
+         allow read, write: if request.auth != null &&
            request.auth.uid in resource.data.members;
        }
-       
+
        // Team members can read/write tasks for their teams
        match /tasks/{taskId} {
-         allow read, write: if request.auth != null && 
+         allow read, write: if request.auth != null &&
            request.auth.uid in get(/databases/$(database)/documents/teams/$(resource.data.teamId)).data.members;
        }
      }
