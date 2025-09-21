@@ -35,14 +35,27 @@ const getters = {
       )
     }
 
-    return filtered.sort(
-      (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-    )
+    // Sort by order within status, fallback to createdAt
+    return filtered.sort((a, b) => {
+      if (a.status === b.status) {
+        const ao = typeof a.order === 'number' ? a.order : Number.MAX_SAFE_INTEGER
+        const bo = typeof b.order === 'number' ? b.order : Number.MAX_SAFE_INTEGER
+        if (ao !== bo) return ao - bo
+      }
+      return new Date(b.createdAt) - new Date(a.createdAt)
+    })
   },
   tasksByStatus: state => {
     const statuses = ['todo', 'in-progress', 'review', 'done']
     return statuses.reduce((acc, status) => {
-      acc[status] = state.tasks.filter(task => task.status === status)
+      acc[status] = state.tasks
+        .filter(task => task.status === status)
+        .sort((a, b) => {
+          const ao = typeof a.order === 'number' ? a.order : Number.MAX_SAFE_INTEGER
+          const bo = typeof b.order === 'number' ? b.order : Number.MAX_SAFE_INTEGER
+          if (ao !== bo) return ao - bo
+          return new Date(b.createdAt) - new Date(a.createdAt)
+        })
       return acc
     }, {})
   }
@@ -58,7 +71,6 @@ const mutations = {
   UPDATE_TASK(state, updatedTask) {
     const index = state.tasks.findIndex(task => task.id === updatedTask.id)
     if (index !== -1) {
-      // Merge the updates with the existing task data to preserve all fields
       const existingTask = state.tasks[index]
       const mergedTask = { ...existingTask, ...updatedTask }
       state.tasks.splice(index, 1, mergedTask)
@@ -122,7 +134,8 @@ const actions = {
         createdAt: new Date(),
         updatedAt: new Date(),
         status: 'todo',
-        priority: taskData.priority || 'medium'
+        priority: taskData.priority || 'medium',
+        order: typeof taskData.order === 'number' ? taskData.order : Date.now()
       }
 
       const docRef = await db.collection('tasks').add(task)
