@@ -294,7 +294,7 @@ export default {
       if (prev && next) return (prevOrder + nextOrder) / 2
       if (!prev && next) return nextOrder - 1
       if (prev && !next) return prevOrder + 1
-      return index // single element fallback
+      return Date.now() // single element fallback with stable unique value
     },
 
     editTask(task) {
