@@ -19,7 +19,6 @@
     "firebase:emulators": "firebase emulators:start",
     "demo:create": "node scripts/create-demo-data.js",
     "demo:cleanup": "node scripts/cleanup-demo.js",
-    "precommit": "npm run format:check && npm run lint",
     "prepare": "husky install"
   },
   "dependencies": {
@@ -61,14 +60,8 @@
   "lint-staged": {
     "*.{js,vue,json,css,scss,md}": [
       "prettier --write",
-      "eslint --fix",
-      "git add"
+      "eslint --fix"
     ]
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
   },
   "engines": {
     "node": ">=14.0.0",
