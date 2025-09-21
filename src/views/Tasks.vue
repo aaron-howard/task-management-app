@@ -16,7 +16,7 @@
     <v-row class="mb-4">
       <v-col cols="12" md="3">
         <v-select
-          v-model="filters.status"
+          v-model="localFilters.status"
           :items="statusOptions"
           label="Status"
           @change="updateFilters"
@@ -24,7 +24,7 @@
       </v-col>
       <v-col cols="12" md="3">
         <v-select
-          v-model="filters.priority"
+          v-model="localFilters.priority"
           :items="priorityOptions"
           label="Priority"
           @change="updateFilters"
@@ -32,7 +32,7 @@
       </v-col>
       <v-col cols="12" md="3">
         <v-select
-          v-model="filters.assignee"
+          v-model="localFilters.assignee"
           :items="assigneeOptions"
           label="Assignee"
           @change="updateFilters"
@@ -67,17 +67,17 @@
 
           <v-card-text class="pa-2">
             <draggable
-              :list="getTasksByStatus(status)"
+              :list="statusLists[status]"
               group="tasks"
-              @change="onTaskMove($event, status)"
+              @change="onTaskChange($event, status)"
               class="kanban-list"
             >
               <TaskCard
-                v-for="task in getTasksByStatus(status)"
+                v-for="task in statusLists[status]"
                 :key="task.id"
                 :task="task"
                 @edit="editTask"
-                @delete="deleteTask"
+                @delete="onDeleteTask"
                 @view="viewTask"
               />
             </draggable>
@@ -99,7 +99,7 @@
       v-model="showDetailsDialog"
       :task="selectedTask"
       @edit="editTask"
-      @delete="deleteTask"
+      @delete="onDeleteTask"
     />
   </v-container>
 </template>
@@ -141,7 +141,14 @@ export default {
         { text: 'Medium', value: 'medium' },
         { text: 'High', value: 'high' }
       ],
-      assigneeOptions: [{ text: 'All Assignees', value: 'all' }]
+      assigneeOptions: [{ text: 'All Assignees', value: 'all' }],
+      localFilters: { status: 'all', priority: 'all', assignee: 'all' },
+      statusLists: {
+        todo: [],
+        'in-progress': [],
+        review: [],
+        done: []
+      }
     }
   },
 
@@ -150,20 +157,41 @@ export default {
     ...mapGetters('teams', ['userTeams']),
 
     tasks() {
-      if (!this.searchQuery) return this.filteredTasks
+      let list = this.filteredTasks
 
-      return this.filteredTasks.filter(
+      // Team filter from route query
+      const teamId = this.$route.query.team
+      if (teamId) list = list.filter(t => t.teamId === teamId)
+
+      if (!this.searchQuery) return list
+
+      return list.filter(
         task =>
-          task.title.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-          task.description
+          (task.title || '').toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+          (task.description || '')
             .toLowerCase()
             .includes(this.searchQuery.toLowerCase())
       )
     }
   },
 
+  watch: {
+    // Rebuild per-status lists when tasks or filters change
+    tasks: {
+      immediate: true,
+      handler() {
+        this.rebuildStatusLists()
+      }
+    },
+    '$route.query.team'() {
+      this.rebuildStatusLists()
+    }
+  },
+
   async mounted() {
     await this.initializeData()
+    // Initialize local filters from store
+    this.localFilters = { ...this.filters }
   },
 
   methods: {
@@ -177,6 +205,25 @@ export default {
       'setFilters'
     ]),
 
+    rebuildStatusLists() {
+      const lists = {
+        todo: [],
+        'in-progress': [],
+        review: [],
+        done: []
+      }
+      // sort within status by order asc, fallback to createdAt desc
+      const copy = [...this.tasks]
+      copy.sort((a, b) => {
+        const ao = typeof a.order === 'number' ? a.order : Number.MAX_SAFE_INTEGER
+        const bo = typeof b.order === 'number' ? b.order : Number.MAX_SAFE_INTEGER
+        if (ao !== bo) return ao - bo
+        return new Date(b.createdAt) - new Date(a.createdAt)
+      })
+      copy.forEach(t => lists[t.status]?.push(t))
+      this.statusLists = lists
+    },
+
     async initializeData() {
       try {
         await this.fetchTasks()
@@ -188,30 +235,12 @@ export default {
     },
 
     async fetchUsers() {
-      // Get all unique member IDs from teams and tasks
       const allMemberIds = new Set()
-
-      // Add team members
-      this.userTeams.forEach(team => {
-        team.members.forEach(memberId => {
-          allMemberIds.add(memberId)
-        })
-      })
-
-      // Add task assignees
-      this.tasks.forEach(task => {
-        if (task.assigneeId) {
-          allMemberIds.add(task.assigneeId)
-        }
-      })
-
+      this.userTeams.forEach(team => team.members.forEach(id => allMemberIds.add(id)))
+      this.tasks.forEach(task => task.assigneeId && allMemberIds.add(task.assigneeId))
       if (allMemberIds.size > 0) {
         await this.$store.dispatch('users/fetchUsers', Array.from(allMemberIds))
       }
-    },
-
-    getTasksByStatus(status) {
-      return this.tasks.filter(task => task.status === status)
     },
 
     getStatusIcon(status) {
@@ -225,12 +254,7 @@ export default {
     },
 
     getStatusColor(status) {
-      const colors = {
-        todo: 'grey',
-        'in-progress': 'orange',
-        review: 'blue',
-        done: 'green'
-      }
+      const colors = { todo: 'grey', 'in-progress': 'orange', review: 'blue', done: 'green' }
       return colors[status] || 'grey'
     },
 
@@ -241,20 +265,36 @@ export default {
         .join(' ')
     },
 
-    async onTaskMove(event, newStatus) {
-      if (event.added) {
-        const task = event.added.element
-        try {
-          await this.moveTask({
-            taskId: task.id,
-            newStatus: newStatus,
-            newOrder: event.added.newIndex
-          })
+    async onTaskChange(event, newStatus) {
+      // Handle cross-column moves (added) and same-column reorders (moved)
+      try {
+        if (event.added) {
+          const task = event.added.element
+          const newIndex = event.added.newIndex
+          const newOrder = this.computeOrderValue(this.statusLists[newStatus], newIndex)
+          await this.moveTask({ taskId: task.id, newStatus, newOrder })
           this.$toast.success('Task moved successfully')
-        } catch (error) {
-          this.$toast.error('Failed to move task')
+        } else if (event.moved) {
+          const { element, newIndex } = event.moved
+          const list = this.statusLists[newStatus]
+          const newOrder = this.computeOrderValue(list, newIndex)
+          await this.updateTask({ taskId: element.id, updates: { order: newOrder } })
         }
+      } catch (e) {
+        this.$toast.error('Failed to update task order')
       }
+    },
+
+    computeOrderValue(list, index) {
+      // Compute fractional order between neighbors to minimize batch writes
+      const prev = list[index - 1]
+      const next = list[index + 1]
+      const prevOrder = typeof prev?.order === 'number' ? prev.order : index - 1
+      const nextOrder = typeof next?.order === 'number' ? next.order : index + 1
+      if (prev && next) return (prevOrder + nextOrder) / 2
+      if (!prev && next) return nextOrder - 1
+      if (prev && !next) return prevOrder + 1
+      return index // single element fallback
     },
 
     editTask(task) {
@@ -267,7 +307,7 @@ export default {
       this.showDetailsDialog = true
     },
 
-    async deleteTask(task) {
+    async onDeleteTask(task) {
       if (confirm('Are you sure you want to delete this task?')) {
         try {
           await this.deleteTask(task.id)
@@ -281,10 +321,7 @@ export default {
     async handleTaskSave(taskData) {
       try {
         if (this.editingTask) {
-          await this.updateTask({
-            taskId: this.editingTask.id,
-            updates: taskData
-          })
+          await this.updateTask({ taskId: this.editingTask.id, updates: taskData })
           this.$toast.success('Task updated successfully')
         } else {
           await this.createTask(taskData)
@@ -302,19 +339,13 @@ export default {
     },
 
     updateFilters() {
-      this.setFilters(this.filters)
+      this.setFilters(this.localFilters)
     }
   }
 }
 </script>
 
 <style scoped>
-.kanban-column {
-  height: 600px;
-}
-
-.kanban-list {
-  min-height: 500px;
-  padding: 8px;
-}
+.kanban-column { height: 600px; }
+.kanban-list { min-height: 500px; padding: 8px; }
 </style>
