@@ -1,5 +1,5 @@
 <template>
-  <v-dialog :value="value" @input="$emit('input', $event)" max-width="600">
+  <v-dialog :model-value="modelValue" @update:model-value="$emit('update:modelValue', $event)" max-width="600">
     <v-card v-if="team">
       <v-card-title>
         <v-icon left>mdi-account-multiple</v-icon>
@@ -70,7 +70,7 @@
 
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn text @click="$emit('input', false)">Close</v-btn>
+        <v-btn text @click="$emit('update:modelValue', false)">Close</v-btn>
         <v-btn color="primary" @click="$emit('save')">Save Changes</v-btn>
       </v-card-actions>
     </v-card>
@@ -83,7 +83,7 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'ManageMembersDialog',
   props: {
-    value: {
+    modelValue: {
       type: Boolean,
       default: false
     },

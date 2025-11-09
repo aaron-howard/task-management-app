@@ -1,9 +1,8 @@
-import firebase from 'firebase/compat/app'
 import { initializeApp } from 'firebase/app'
+import { getAuth } from 'firebase/auth'
+import { getFirestore, enableIndexedDbPersistence } from 'firebase/firestore'
+import { getFunctions } from 'firebase/functions'
 import { getAnalytics } from 'firebase/analytics'
-import 'firebase/compat/auth'
-import 'firebase/compat/firestore'
-import 'firebase/compat/functions'
 
 // Your Firebase configuration
 // Replace with your actual Firebase config from Firebase Console
@@ -18,17 +17,16 @@ const firebaseConfig = {
 }
 
 // Initialize Firebase
-firebase.initializeApp(firebaseConfig)
+const app = initializeApp(firebaseConfig)
 
 // Initialize Firebase services
-const auth = firebase.auth()
-const db = firebase.firestore()
-const functions = firebase.functions()
-const app = initializeApp(firebaseConfig)
+const auth = getAuth(app)
+const db = getFirestore(app)
+const functions = getFunctions(app)
 const analytics = getAnalytics(app)
 
 // Enable offline persistence
-db.enablePersistence().catch(err => {
+enableIndexedDbPersistence(db).catch(err => {
   if (err.code === 'failed-precondition') {
     // eslint-disable-next-line no-console
     console.warn(
@@ -43,4 +41,4 @@ db.enablePersistence().catch(err => {
 })
 
 export { auth, db, functions, analytics }
-export default firebase
+export default app

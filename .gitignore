@@ -160,3 +160,6 @@ build/
 # Temporary files
 tmp/
 temp/
+
+# Nested project directories (should not be committed)
+task-management-app/

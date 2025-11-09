@@ -134,11 +134,11 @@ export default {
   },
   mounted() {
     // Initialize theme from localStorage
-    this.$vuetify.theme.dark = this.theme === 'dark'
+    this.$vuetify.theme.global.name.value = this.theme
   },
   watch: {
     theme(newTheme) {
-      this.$vuetify.theme.dark = newTheme === 'dark'
+      this.$vuetify.theme.global.name.value = newTheme
     }
   }
 }

@@ -1,8 +1,5 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import store from '@/store'
-
-Vue.use(VueRouter)
 
 const routes = [
   {
@@ -42,30 +39,28 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
-    path: '*',
+    path: '/:pathMatch(.*)*',
     redirect: '/'
   }
 ]
 
-const router = new VueRouter({
-  mode: 'history',
-  base: process.env.BASE_URL,
+const router = createRouter({
+  history: createWebHistory(process.env.BASE_URL),
   routes
 })
 
 // Navigation guards
-router.beforeEach(async (to, from, next) => {
+router.beforeEach(async (to, from) => {
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
   const requiresGuest = to.matched.some(record => record.meta.requiresGuest)
   const isAuthenticated = store.getters['auth/isAuthenticated']
 
   if (requiresAuth && !isAuthenticated) {
-    next('/login')
+    return '/login'
   } else if (requiresGuest && isAuthenticated) {
-    next('/')
-  } else {
-    next()
+    return '/'
   }
+  // No return needed - navigation proceeds normally
 })
 
 export default router

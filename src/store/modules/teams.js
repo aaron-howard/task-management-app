@@ -1,4 +1,16 @@
 import { db } from '@/firebase/config'
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  addDoc,
+  doc,
+  getDoc,
+  updateDoc,
+  deleteDoc,
+  onSnapshot
+} from 'firebase/firestore'
 
 const state = {
   teams: [],
@@ -61,10 +73,11 @@ const actions = {
       const userId = rootGetters['auth/user']?.uid
       if (!userId) return
 
-      const snapshot = await db
-        .collection('teams')
-        .where('members', 'array-contains', userId)
-        .get()
+      const q = query(
+        collection(db, 'teams'),
+        where('members', 'array-contains', userId)
+      )
+      const snapshot = await getDocs(q)
 
       const teams = snapshot.docs.map(doc => ({
         id: doc.id,
@@ -94,7 +107,7 @@ const actions = {
         updatedAt: new Date()
       }
 
-      const docRef = await db.collection('teams').add(team)
+      const docRef = await addDoc(collection(db, 'teams'), team)
       const newTeam = { id: docRef.id, ...team }
 
       // Don't manually add to state - let the subscription handle it
@@ -109,13 +122,10 @@ const actions = {
     try {
       commit('CLEAR_ERROR')
 
-      await db
-        .collection('teams')
-        .doc(teamId)
-        .update({
-          ...updates,
-          updatedAt: new Date()
-        })
+      await updateDoc(doc(db, 'teams', teamId), {
+        ...updates,
+        updatedAt: new Date()
+      })
 
       // Don't manually update state - let the subscription handle it
       return { id: teamId, ...updates }
@@ -129,7 +139,7 @@ const actions = {
     try {
       commit('CLEAR_ERROR')
 
-      await db.collection('teams').doc(teamId).delete()
+      await deleteDoc(doc(db, 'teams', teamId))
       // Don't manually remove from state - let the subscription handle it
     } catch (error) {
       commit('SET_ERROR', error.message)
@@ -142,10 +152,11 @@ const actions = {
       commit('CLEAR_ERROR')
 
       // Find user by email
-      const usersSnapshot = await db
-        .collection('users')
-        .where('email', '==', memberEmail)
-        .get()
+      const usersQuery = query(
+        collection(db, 'users'),
+        where('email', '==', memberEmail)
+      )
+      const usersSnapshot = await getDocs(usersQuery)
 
       if (usersSnapshot.empty) {
         throw new Error('User not found')
@@ -155,7 +166,8 @@ const actions = {
       const userId = userDoc.id
 
       // Get current team data
-      const teamDoc = await db.collection('teams').doc(teamId).get()
+      const teamDocRef = doc(db, 'teams', teamId)
+      const teamDoc = await getDoc(teamDocRef)
       const teamData = teamDoc.data()
 
       if (teamData.members.includes(userId)) {
@@ -163,13 +175,10 @@ const actions = {
       }
 
       // Add user to team
-      await db
-        .collection('teams')
-        .doc(teamId)
-        .update({
-          members: [...teamData.members, userId],
-          updatedAt: new Date()
-        })
+      await updateDoc(teamDocRef, {
+        members: [...teamData.members, userId],
+        updatedAt: new Date()
+      })
 
       // Refresh teams
       await dispatch('fetchTeams')
@@ -184,13 +193,14 @@ const actions = {
       commit('CLEAR_ERROR')
 
       // Get current team data
-      const teamDoc = await db.collection('teams').doc(teamId).get()
+      const teamDocRef = doc(db, 'teams', teamId)
+      const teamDoc = await getDoc(teamDocRef)
       const teamData = teamDoc.data()
 
       // Remove user from team
       const updatedMembers = teamData.members.filter(id => id !== userId)
 
-      await db.collection('teams').doc(teamId).update({
+      await updateDoc(teamDocRef, {
         members: updatedMembers,
         updatedAt: new Date()
       })
@@ -211,21 +221,24 @@ const actions = {
     const userId = rootGetters['auth/user']?.uid
     if (!userId) return
 
-    return db
-      .collection('teams')
-      .where('members', 'array-contains', userId)
-      .onSnapshot(
-        snapshot => {
-          const teams = snapshot.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data()
-          }))
-          commit('SET_TEAMS', teams)
-        },
-        error => {
-          commit('SET_ERROR', error.message)
-        }
-      )
+    const q = query(
+      collection(db, 'teams'),
+      where('members', 'array-contains', userId)
+    )
+
+    return onSnapshot(
+      q,
+      snapshot => {
+        const teams = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }))
+        commit('SET_TEAMS', teams)
+      },
+      error => {
+        commit('SET_ERROR', error.message)
+      }
+    )
   }
 }
 

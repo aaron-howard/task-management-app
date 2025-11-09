@@ -1,4 +1,10 @@
 import { db } from '@/firebase/config'
+import {
+  collection,
+  query,
+  where,
+  getDocs
+} from 'firebase/firestore'
 
 const state = {
   users: [],
@@ -58,10 +64,11 @@ const actions = {
 
       for (let i = 0; i < userIds.length; i += batchSize) {
         const batch = userIds.slice(i, i + batchSize)
-        const snapshot = await db
-          .collection('users')
-          .where('uid', 'in', batch)
-          .get()
+        const q = query(
+          collection(db, 'users'),
+          where('uid', 'in', batch)
+        )
+        const snapshot = await getDocs(q)
 
         snapshot.docs.forEach(doc => {
           users.push({ id: doc.id, ...doc.data() })
@@ -81,7 +88,7 @@ const actions = {
       commit('SET_LOADING', true)
       commit('CLEAR_ERROR')
 
-      const snapshot = await db.collection('users').get()
+      const snapshot = await getDocs(collection(db, 'users'))
       const users = snapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data()

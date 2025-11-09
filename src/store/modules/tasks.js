@@ -1,4 +1,16 @@
 import { db } from '@/firebase/config'
+import {
+  collection,
+  query,
+  where,
+  orderBy,
+  getDocs,
+  addDoc,
+  doc,
+  updateDoc,
+  deleteDoc,
+  onSnapshot
+} from 'firebase/firestore'
 
 const state = {
   tasks: [],
@@ -90,11 +102,13 @@ const actions = {
       const userId = rootGetters['auth/user']?.uid
       if (!userId) return
 
-      const snapshot = await db
-        .collection('tasks')
-        .where('teamId', 'in', await getTeamIds(userId))
-        .orderBy('createdAt', 'desc')
-        .get()
+      const teamIds = await getTeamIds(userId)
+      const q = query(
+        collection(db, 'tasks'),
+        where('teamId', 'in', teamIds),
+        orderBy('createdAt', 'desc')
+      )
+      const snapshot = await getDocs(q)
 
       const tasks = snapshot.docs.map(doc => ({
         id: doc.id,
@@ -125,7 +139,7 @@ const actions = {
         priority: taskData.priority || 'medium'
       }
 
-      const docRef = await db.collection('tasks').add(task)
+      const docRef = await addDoc(collection(db, 'tasks'), task)
       const newTask = { id: docRef.id, ...task }
 
       commit('ADD_TASK', newTask)
@@ -140,13 +154,10 @@ const actions = {
     try {
       commit('CLEAR_ERROR')
 
-      await db
-        .collection('tasks')
-        .doc(taskId)
-        .update({
-          ...updates,
-          updatedAt: new Date()
-        })
+      await updateDoc(doc(db, 'tasks', taskId), {
+        ...updates,
+        updatedAt: new Date()
+      })
 
       const updatedTask = { id: taskId, ...updates }
       commit('UPDATE_TASK', updatedTask)
@@ -161,7 +172,7 @@ const actions = {
     try {
       commit('CLEAR_ERROR')
 
-      await db.collection('tasks').doc(taskId).delete()
+      await deleteDoc(doc(db, 'tasks', taskId))
       commit('DELETE_TASK', taskId)
     } catch (error) {
       commit('SET_ERROR', error.message)
@@ -179,7 +190,7 @@ const actions = {
         updatedAt: new Date()
       }
 
-      await db.collection('tasks').doc(taskId).update(updates)
+      await updateDoc(doc(db, 'tasks', taskId), updates)
 
       const updatedTask = { id: taskId, ...updates }
       commit('UPDATE_TASK', updatedTask)
@@ -199,31 +210,35 @@ const actions = {
 
     const teamIds = await getTeamIds(userId)
 
-    return db
-      .collection('tasks')
-      .where('teamId', 'in', teamIds)
-      .orderBy('createdAt', 'desc')
-      .onSnapshot(
-        snapshot => {
-          const tasks = snapshot.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data()
-          }))
-          commit('SET_TASKS', tasks)
-        },
-        error => {
-          commit('SET_ERROR', error.message)
-        }
-      )
+    const q = query(
+      collection(db, 'tasks'),
+      where('teamId', 'in', teamIds),
+      orderBy('createdAt', 'desc')
+    )
+
+    return onSnapshot(
+      q,
+      snapshot => {
+        const tasks = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }))
+        commit('SET_TASKS', tasks)
+      },
+      error => {
+        commit('SET_ERROR', error.message)
+      }
+    )
   }
 }
 
 // Helper function to get team IDs for a user
 async function getTeamIds(userId) {
-  const userTeamsSnapshot = await db
-    .collection('teams')
-    .where('members', 'array-contains', userId)
-    .get()
+  const q = query(
+    collection(db, 'teams'),
+    where('members', 'array-contains', userId)
+  )
+  const userTeamsSnapshot = await getDocs(q)
 
   return userTeamsSnapshot.docs.map(doc => doc.id)
 }

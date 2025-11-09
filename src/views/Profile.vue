@@ -191,6 +191,13 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import { auth } from '@/firebase/config'
+import {
+  updateProfile,
+  updatePassword,
+  deleteUser,
+  reauthenticateWithCredential,
+  EmailAuthProvider
+} from 'firebase/auth'
 
 export default {
   name: 'Profile',
@@ -262,7 +269,7 @@ export default {
 
         // Update display name
         if (this.form.displayName !== user.displayName) {
-          await user.updateProfile({
+          await updateProfile(user, {
             displayName: this.form.displayName
           })
         }
@@ -274,14 +281,14 @@ export default {
           }
 
           // Re-authenticate user
-          const credential = auth.EmailAuthProvider.credential(
+          const credential = EmailAuthProvider.credential(
             user.email,
             this.form.currentPassword
           )
-          await user.reauthenticateWithCredential(credential)
+          await reauthenticateWithCredential(user, credential)
 
           // Update password
-          await user.updatePassword(this.form.newPassword)
+          await updatePassword(user, this.form.newPassword)
         }
 
         this.$toast.success('Profile updated successfully')
@@ -298,7 +305,7 @@ export default {
 
       try {
         const user = auth.currentUser
-        await user.delete()
+        await deleteUser(user)
 
         this.$toast.success('Account deleted successfully')
         await this.logout()
