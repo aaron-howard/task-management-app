@@ -25,11 +25,11 @@
   "dependencies": {
     "@mdi/font": "^6.9.96",
     "firebase": "^9.23.0",
-    "vue": "^2.6.14",
-    "vue-router": "^3.5.1",
-    "vue-toastification": "^1.7.6",
+    "vue": "^2.7.16",
+    "vue-router": "^3.6.5",
+    "vue-toastification": "^1.7.14",
     "vuedraggable": "^2.24.3",
-    "vuetify": "^2.6.0",
+    "vuetify": "^2.6.13",
     "vuex": "^3.6.2"
   },
   "devDependencies": {
@@ -40,18 +40,18 @@
     "@vue/eslint-config-standard": "^6.1.0",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.32.0",
-    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.2.0",
     "eslint-plugin-standard": "^5.0.0",
     "eslint-plugin-vue": "^7.20.0",
-    "firebase-tools": "^11.16.0",
+    "firebase-tools": "^11.30.0",
     "husky": "^8.0.3",
-    "lint-staged": "^13.1.0",
+    "lint-staged": "^13.3.0",
     "prettier": "^3.6.2",
-    "sass": "^1.32.7",
-    "sass-loader": "^12.0.0",
-    "vue-template-compiler": "^2.6.14"
+    "sass": "^1.93.3",
+    "sass-loader": "^12.6.0",
+    "vue-template-compiler": "^2.7.16"
   },
   "browserslist": [
     "> 1%",
