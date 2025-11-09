@@ -1,14 +1,11 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import { createStore } from 'vuex'
 import auth from './modules/auth'
 import tasks from './modules/tasks'
 import teams from './modules/teams'
 import users from './modules/users'
 import ui from './modules/ui'
 
-Vue.use(Vuex)
-
-export default new Vuex.Store({
+export default createStore({
   modules: {
     auth,
     tasks,

@@ -1,7 +1,7 @@
 <template>
   <v-dialog
-    :value="value"
-    @input="$emit('input', $event)"
+    :model-value="modelValue"
+    @update:model-value="$emit('update:modelValue', $event)"
     max-width="600"
     persistent
   >
@@ -124,7 +124,7 @@ import { toDate } from '@/utils/dateUtils'
 export default {
   name: 'TaskDialog',
   props: {
-    value: {
+    modelValue: {
       type: Boolean,
       default: false
     },
@@ -299,7 +299,7 @@ export default {
     },
 
     closeDialog() {
-      this.$emit('close')
+      this.$emit('update:modelValue', false)
       this.resetForm()
     }
   }

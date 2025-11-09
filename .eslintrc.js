@@ -8,8 +8,10 @@ module.exports = {
     '@vue/standard'
   ],
   parserOptions: {
-    parser: 'babel-eslint',
-    requireConfigFile: false
+    parser: '@babel/eslint-parser',
+    requireConfigFile: false,
+    ecmaVersion: 2020,
+    sourceType: 'module'
   },
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',

@@ -1,0 +1,105 @@
+# npm audit report
+
+cross-spawn  <6.0.6
+Severity: high
+Regular Expression Denial of Service (ReDoS) in cross-spawn - https://github.com/advisories/GHSA-3xgq-45jj-v275
+fix available via `npm audit fix --force`
+Will install @vue/cli-plugin-eslint@3.12.1, which is a breaking change
+node_modules/yorkie/node_modules/cross-spawn
+  execa  0.5.0 - 0.9.0
+  Depends on vulnerable versions of cross-spawn
+  node_modules/yorkie/node_modules/execa
+    yorkie  *
+    Depends on vulnerable versions of execa
+    node_modules/yorkie
+      @vue/cli-plugin-eslint  >=3.9.0
+      Depends on vulnerable versions of @vue/cli-service
+      Depends on vulnerable versions of yorkie
+      node_modules/@vue/cli-plugin-eslint
+
+postcss  <8.4.31
+Severity: moderate
+PostCSS line return parsing error - https://github.com/advisories/GHSA-7fh5-64p2-3v2j
+fix available via `npm audit fix --force`
+Will install @vue/cli-plugin-eslint@3.12.1, which is a breaking change
+node_modules/@vue/component-compiler-utils/node_modules/postcss
+  @vue/component-compiler-utils  *
+  Depends on vulnerable versions of postcss
+  node_modules/@vue/component-compiler-utils
+    @vue/cli-service  *
+    Depends on vulnerable versions of @vue/cli-plugin-router
+    Depends on vulnerable versions of @vue/cli-plugin-vuex
+    Depends on vulnerable versions of @vue/component-compiler-utils
+    Depends on vulnerable versions of vue-loader
+    Depends on vulnerable versions of webpack-dev-server
+    node_modules/@vue/cli-service
+      @vue/cli-plugin-router  *
+      Depends on vulnerable versions of @vue/cli-service
+      node_modules/@vue/cli-plugin-router
+      @vue/cli-plugin-vuex  *
+      Depends on vulnerable versions of @vue/cli-service
+      node_modules/@vue/cli-plugin-vuex
+    vue-loader  15.0.0-beta.1 - 15.11.1
+    Depends on vulnerable versions of @vue/component-compiler-utils
+    node_modules/@vue/vue-loader-v15
+
+undici  6.0.0 - 6.21.1
+Severity: moderate
+Use of Insufficiently Random Values in undici - https://github.com/advisories/GHSA-c76h-2ccp-4975
+undici Denial of Service attack via bad certificate data - https://github.com/advisories/GHSA-cxrh-j4jr-qwg3
+fix available via `npm audit fix`
+node_modules/undici
+  @firebase/auth  1.7.7-20240813205648 - 1.7.7-canary.1ff9661af || 1.7.8-20240827161511 - 1.7.9
+  Depends on vulnerable versions of undici
+  node_modules/@firebase/auth
+    firebase  0.900.22 || 7.9.1-0 - 7.9.1-canary.0396117e || 8.10.0-20217172214 - 8.10.0-canary.f40c0db53 || 9.0.0-20217250818 - 9.0.0-canary.d0d3acb10 || 9.0.1-2021727231341 - 9.0.1-canary.e039e1472 || 9.0.2-2021891633 - 9.0.2-canary.ff9baf70c || 9.0.3-202181503543 - 9.1.0-canary.f7d8324a1 || 9.1.1-2021830195733 - 9.1.1-canary.e70de6201 || 9.1.2-20219523556 - 9.1.2-canary.fc1d36497 || 9.22.1-20230524195328 || 10.12.2-20240523185724 - 10.12.2-canary.872e6f63e || 10.13.0-20240813205648 - 10.13.0-canary.fa0ed08fb || 10.13.1-20240827161511 - 10.14.1 || 11.9.0-20250603144652 - 11.9.0-canary.5871fd656
+    Depends on vulnerable versions of @firebase/auth
+    Depends on vulnerable versions of @firebase/auth-compat
+    Depends on vulnerable versions of @firebase/firestore
+    Depends on vulnerable versions of @firebase/firestore-compat
+    Depends on vulnerable versions of @firebase/functions
+    Depends on vulnerable versions of @firebase/functions-compat
+    Depends on vulnerable versions of @firebase/storage
+    Depends on vulnerable versions of @firebase/storage-compat
+    node_modules/firebase
+  @firebase/auth-compat  0.5.12-20240813205648 - 0.5.12-canary.fa0ed08fb || 0.5.13-20240827161511 - 0.5.14
+  Depends on vulnerable versions of @firebase/auth
+  Depends on vulnerable versions of undici
+  node_modules/@firebase/auth-compat
+  @firebase/firestore  4.7.0-20240813205648 - 4.7.0-canary.fa0ed08fb || 4.7.1-20240827161511 - 4.7.3
+  Depends on vulnerable versions of undici
+  node_modules/@firebase/firestore
+    @firebase/firestore-compat  <=0.0.900-exp.520ca39d0 || 0.3.25-20240130223218 - 0.3.25-20240131233318 || 0.3.30-20240424141009 - 0.3.30-dataconnect-preview.f2ddc3d7b || 0.3.35-20240813205648 - 0.3.35-canary.fa0ed08fb || 0.3.36-20240827161511 - 0.3.38
+    Depends on vulnerable versions of @firebase/firestore
+    node_modules/@firebase/firestore-compat
+  @firebase/functions  0.11.7-20240827161511 - 0.11.8
+  Depends on vulnerable versions of undici
+  node_modules/@firebase/functions
+    @firebase/functions-compat  0.3.13-20240827161511 - 0.3.14
+    Depends on vulnerable versions of @firebase/functions
+    node_modules/@firebase/functions-compat
+  @firebase/storage  0.13.0-20240814182916 - 0.13.0-canary.fa0ed08fb || 0.13.1-20240827161511 - 0.13.2
+  Depends on vulnerable versions of undici
+  node_modules/@firebase/storage
+    @firebase/storage-compat  <=0.0.900-exp.520ca39d0 || 0.1.4-202192711727 - 0.1.4-canary.f27fe4304 || 0.3.10-20240814182916 - 0.3.10-canary.fa0ed08fb || 0.3.11-20240827161511 - 0.3.12
+    Depends on vulnerable versions of @firebase/storage
+    node_modules/@firebase/storage-compat
+
+webpack-dev-server  <=5.2.0
+Severity: moderate
+webpack-dev-server users' source code may be stolen when they access a malicious web site with non-Chromium based browser - https://github.com/advisories/GHSA-9jgg-88mc-972h
+webpack-dev-server users' source code may be stolen when they access a malicious web site - https://github.com/advisories/GHSA-4v9v-hfq4-rm2v
+fix available via `npm audit fix --force`
+Will install @vue/cli-plugin-eslint@3.12.1, which is a breaking change
+node_modules/webpack-dev-server
+
+21 vulnerabilities (17 moderate, 4 high)
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+To address all issues possible (including breaking changes), run:
+  npm audit fix --force
+
+Some issues need review, and may require choosing
+a different dependency.

@@ -1,5 +1,20 @@
 import { auth, db } from '@/firebase/config'
 import router from '@/router'
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  GoogleAuthProvider,
+  signOut,
+  updateProfile,
+  onAuthStateChanged
+} from 'firebase/auth'
+import {
+  doc,
+  setDoc,
+  getDoc,
+  updateDoc
+} from 'firebase/firestore'
 
 const state = {
   user: null,
@@ -35,19 +50,20 @@ const actions = {
       commit('SET_LOADING', true)
       commit('CLEAR_ERROR')
 
-      const userCredential = await auth.createUserWithEmailAndPassword(
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
         email,
         password
       )
       const user = userCredential.user
 
-      await user.updateProfile({ displayName })
+      await updateProfile(user, { displayName })
 
       // Create user document in Firestore
-      await db.collection('users').doc(user.uid).set({
+      await setDoc(doc(db, 'users', user.uid), {
         uid: user.uid,
         email: user.email,
-        displayName: displayName,
+        displayName,
         photoURL: user.photoURL,
         createdAt: new Date(),
         lastLoginAt: new Date()
@@ -68,14 +84,15 @@ const actions = {
       commit('SET_LOADING', true)
       commit('CLEAR_ERROR')
 
-      const userCredential = await auth.signInWithEmailAndPassword(
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
         email,
         password
       )
       const user = userCredential.user
 
       // Update last login time
-      await db.collection('users').doc(user.uid).update({
+      await updateDoc(doc(db, 'users', user.uid), {
         lastLoginAt: new Date()
       })
 
@@ -94,14 +111,15 @@ const actions = {
       commit('SET_LOADING', true)
       commit('CLEAR_ERROR')
 
-      const provider = new auth.GoogleAuthProvider()
-      const userCredential = await auth.signInWithPopup(provider)
+      const provider = new GoogleAuthProvider()
+      const userCredential = await signInWithPopup(auth, provider)
       const user = userCredential.user
 
       // Check if user document exists, create if not
-      const userDoc = await db.collection('users').doc(user.uid).get()
-      if (!userDoc.exists) {
-        await db.collection('users').doc(user.uid).set({
+      const userDocRef = doc(db, 'users', user.uid)
+      const userDoc = await getDoc(userDocRef)
+      if (!userDoc.exists()) {
+        await setDoc(userDocRef, {
           uid: user.uid,
           email: user.email,
           displayName: user.displayName,
@@ -110,7 +128,7 @@ const actions = {
           lastLoginAt: new Date()
         })
       } else {
-        await db.collection('users').doc(user.uid).update({
+        await updateDoc(userDocRef, {
           lastLoginAt: new Date()
         })
       }
@@ -127,7 +145,7 @@ const actions = {
 
   async logout({ commit }) {
     try {
-      await auth.signOut()
+      await signOut(auth)
       commit('SET_USER', null)
       router.push('/login')
     } catch (error) {
@@ -138,7 +156,7 @@ const actions = {
 
   async initAuth({ commit }) {
     return new Promise(resolve => {
-      auth.onAuthStateChanged(user => {
+      onAuthStateChanged(auth, user => {
         commit('SET_USER', user)
         resolve(user)
       })

@@ -1,15 +1,18 @@
-import Vue from 'vue'
+import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify'
-import 'vuetify/dist/vuetify.min.css'
 import Toast from 'vue-toastification'
 import 'vue-toastification/dist/index.css'
 
-Vue.config.productionTip = false
+const app = createApp(App)
 
-Vue.use(Toast, {
+// Use plugins
+app.use(router)
+app.use(store)
+app.use(vuetify)
+app.use(Toast, {
   position: 'top-right',
   timeout: 3000,
   closeOnClick: true,
@@ -24,13 +27,11 @@ Vue.use(Toast, {
   rtl: false
 })
 
-new Vue({
-  router,
-  store,
-  vuetify,
-  render: h => h(App),
-  async created() {
-    // Initialize authentication state
-    await this.$store.dispatch('auth/initAuth')
-  }
-}).$mount('#app')
+// Initialize auth before mounting
+store.dispatch('auth/initAuth').then(() => {
+  app.mount('#app')
+}).catch((error) => {
+  console.error('Failed to initialize auth:', error)
+  // Mount anyway - user can still access login page
+  app.mount('#app')
+})

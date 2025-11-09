@@ -247,7 +247,7 @@ export default {
         try {
           await this.moveTask({
             taskId: task.id,
-            newStatus: newStatus,
+            newStatus,
             newOrder: event.added.newIndex
           })
           this.$toast.success('Task moved successfully')

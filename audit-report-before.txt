@@ -1,0 +1,318 @@
+# npm audit report
+
+@grpc/grpc-js  <1.8.22
+Severity: moderate
+@grpc/grpc-js can allocate memory for incoming messages well above configured limits - https://github.com/advisories/GHSA-7v5v-9h63-cj86
+fix available via `npm audit fix --force`
+Will install firebase@12.5.0, which is a breaking change
+node_modules/@grpc/grpc-js
+node_modules/firebase-tools/node_modules/@grpc/grpc-js
+  @firebase/firestore  1.3.1-0 - 1.3.1-canary.df1b588 || 1.3.2-0 - 1.3.3-canary.bc4a844 || 1.13.1-0 - 1.13.1-canary.ce3addba || 1.14.0-0 - 1.15.1 || 3.7.3-20221108184443 - 3.7.3-canary.fde5adf63 || 3.8.0-20221206221533 - 4.0.0
+  Depends on vulnerable versions of @grpc/grpc-js
+  node_modules/@firebase/firestore
+    @firebase/firestore-compat  <=0.0.900-exp.520ca39d0 || 0.2.3-20221108184443 - 0.2.3-canary.fde5adf63 || 0.3.0-20221206221533 - 0.3.13 || 0.3.25-20240130223218 - 0.3.25-20240131233318 || 0.3.30-20240424141009 - 0.3.30-dataconnect-preview.f2ddc3d7b || 0.4.0-20230301000120 - 0.4.0-firebase-studio-sdk-integration.f7536090e
+    Depends on vulnerable versions of @firebase/firestore
+    node_modules/@firebase/firestore-compat
+      firebase  <=10.9.0-canary.ed84efe50 || 11.9.0-20250603144652 - 11.9.0-canary.5871fd656 || 12.0.0-20250715195345 - 12.0.0-canary.e25317f9f
+      Depends on vulnerable versions of @firebase/firestore
+      Depends on vulnerable versions of @firebase/firestore-compat
+      node_modules/firebase
+  google-gax  0.19.0 - 4.0.3
+  Depends on vulnerable versions of @grpc/grpc-js
+  Depends on vulnerable versions of protobufjs
+  node_modules/firebase-tools/node_modules/google-gax
+
+basic-auth-connect  1.0.0
+Severity: high
+basic-auth-connect's callback uses time unsafe string comparison - https://github.com/advisories/GHSA-7p89-p6hx-q4fw
+fix available via `npm audit fix`
+node_modules/firebase-tools/node_modules/basic-auth-connect
+
+body-parser  <1.20.3
+Severity: high
+body-parser vulnerable to denial of service when url encoding is enabled - https://github.com/advisories/GHSA-qwcr-r2fm-qrc7
+fix available via `npm audit fix`
+node_modules/firebase-tools/node_modules/body-parser
+  express  <=4.21.0 || 5.0.0-alpha.1 - 5.0.0
+  Depends on vulnerable versions of body-parser
+  Depends on vulnerable versions of cookie
+  Depends on vulnerable versions of path-to-regexp
+  Depends on vulnerable versions of send
+  Depends on vulnerable versions of serve-static
+  node_modules/firebase-tools/node_modules/express
+
+brace-expansion  1.0.0 - 1.1.11 || 2.0.0 - 2.0.1
+brace-expansion Regular Expression Denial of Service vulnerability - https://github.com/advisories/GHSA-v6h2-p8h4-qcjw
+brace-expansion Regular Expression Denial of Service vulnerability - https://github.com/advisories/GHSA-v6h2-p8h4-qcjw
+fix available via `npm audit fix`
+node_modules/firebase-tools/node_modules/brace-expansion
+node_modules/firebase-tools/node_modules/cacache/node_modules/brace-expansion
+node_modules/firebase-tools/node_modules/google-gax/node_modules/brace-expansion
+node_modules/firebase-tools/node_modules/superstatic/node_modules/brace-expansion
+
+braces  <3.0.3
+Severity: high
+Uncontrolled resource consumption in braces - https://github.com/advisories/GHSA-grv7-fg5c-xmjg
+fix available via `npm audit fix`
+node_modules/firebase-tools/node_modules/braces
+
+cookie  <0.7.0
+cookie accepts cookie name, path, and domain with out of bounds characters - https://github.com/advisories/GHSA-pxg6-pf52-xh8x
+fix available via `npm audit fix`
+node_modules/firebase-tools/node_modules/cookie
+
+cross-spawn  <6.0.6 || >=7.0.0 <7.0.5
+Severity: high
+Regular Expression Denial of Service (ReDoS) in cross-spawn - https://github.com/advisories/GHSA-3xgq-45jj-v275
+Regular Expression Denial of Service (ReDoS) in cross-spawn - https://github.com/advisories/GHSA-3xgq-45jj-v275
+fix available via `npm audit fix --force`
+Will install @vue/cli-plugin-eslint@3.12.1, which is a breaking change
+node_modules/firebase-tools/node_modules/cross-env/node_modules/cross-spawn
+node_modules/firebase-tools/node_modules/cross-spawn
+node_modules/yorkie/node_modules/cross-spawn
+  execa  0.5.0 - 0.9.0
+  Depends on vulnerable versions of cross-spawn
+  node_modules/yorkie/node_modules/execa
+    yorkie  *
+    Depends on vulnerable versions of execa
+    node_modules/yorkie
+      @vue/cli-plugin-eslint  >=3.9.0
+      Depends on vulnerable versions of @vue/cli-service
+      Depends on vulnerable versions of yorkie
+      node_modules/@vue/cli-plugin-eslint
+
+debug  4.0.0 - 4.3.0
+Regular Expression Denial of Service in debug - https://github.com/advisories/GHSA-gxpj-cx7g-858c
+fix available via `npm audit fix`
+node_modules/firebase-tools/node_modules/https-proxy-agent/node_modules/debug
+
+
+
+firebase-tools  <=13.5.2
+Severity: high
+Firebase vulnerable to CRSF attack - https://github.com/advisories/GHSA-rcm2-22f3-pqv3
+Depends on vulnerable versions of proxy-agent
+Depends on vulnerable versions of request
+fix available via `npm audit fix --force`
+Will install firebase-tools@14.24.1, which is a breaking change
+node_modules/firebase-tools
+
+form-data  >=4.0.0 <4.0.4 || <2.5.4
+Severity: critical
+form-data uses unsafe random function in form-data for choosing boundary - https://github.com/advisories/GHSA-fjxv-7rqg-78g4
+form-data uses unsafe random function in form-data for choosing boundary - https://github.com/advisories/GHSA-fjxv-7rqg-78g4
+fix available via `npm audit fix --force`
+Will install firebase-tools@14.24.1, which is a breaking change
+node_modules/firebase-tools/node_modules/form-data
+node_modules/firebase-tools/node_modules/request/node_modules/form-data
+  request  *
+  Depends on vulnerable versions of form-data
+  Depends on vulnerable versions of tough-cookie
+  node_modules/firebase-tools/node_modules/request
+
+ip  *
+Severity: high
+NPM IP package incorrectly identifies some private IP addresses as public - https://github.com/advisories/GHSA-78xj-cgh5-2h22
+NPM IP package incorrectly identifies some private IP addresses as public - https://github.com/advisories/GHSA-78xj-cgh5-2h22
+ip SSRF improper categorization in isPublic - https://github.com/advisories/GHSA-2p57-rm9w-gvfp
+fix available via `npm audit fix --force`
+Will install firebase-tools@14.24.1, which is a breaking change
+node_modules/firebase-tools/node_modules/ip
+node_modules/firebase-tools/node_modules/socks/node_modules/ip
+  pac-resolver  1.3.0 - 7.0.0
+  Depends on vulnerable versions of ip
+  node_modules/firebase-tools/node_modules/pac-resolver
+    pac-proxy-agent  1.1.0 - 6.0.4
+    Depends on vulnerable versions of pac-resolver
+    node_modules/firebase-tools/node_modules/pac-proxy-agent
+      proxy-agent  2.1.0 - 6.2.2
+      Depends on vulnerable versions of pac-proxy-agent
+      node_modules/firebase-tools/node_modules/proxy-agent
+  socks  1.0.0 - 2.7.1
+  Depends on vulnerable versions of ip
+  node_modules/firebase-tools/node_modules/socks
+
+micromatch  <4.0.8
+Severity: moderate
+Regular Expression Denial of Service (ReDoS) in micromatch - https://github.com/advisories/GHSA-952p-6rrq-rcjv
+fix available via `npm audit fix`
+node_modules/lint-staged/node_modules/micromatch
+  lint-staged  7.0.0 - 8.2.1 || 13.3.0 - 15.2.4
+  Depends on vulnerable versions of micromatch
+  node_modules/lint-staged
+
+on-headers  <1.1.0
+on-headers is vulnerable to http response header manipulation - https://github.com/advisories/GHSA-76c9-3jph-rj3q
+fix available via `npm audit fix`
+node_modules/firebase-tools/node_modules/on-headers
+  compression  1.0.3 - 1.8.0
+  Depends on vulnerable versions of on-headers
+  node_modules/firebase-tools/node_modules/compression
+  morgan  1.6.0 - 1.10.0
+  Depends on vulnerable versions of on-headers
+  node_modules/firebase-tools/node_modules/morgan
+
+path-to-regexp  <=0.1.11 || 0.2.0 - 1.8.0
+Severity: high
+path-to-regexp outputs backtracking regular expressions - https://github.com/advisories/GHSA-9wv6-86v2-598j
+path-to-regexp outputs backtracking regular expressions - https://github.com/advisories/GHSA-9wv6-86v2-598j
+path-to-regexp contains a ReDoS - https://github.com/advisories/GHSA-rhx6-c78j-4q9w
+fix available via `npm audit fix`
+node_modules/firebase-tools/node_modules/path-to-regexp
+node_modules/firebase-tools/node_modules/superstatic/node_modules/path-to-regexp
+  router  1.0.0-beta.1 - 2.0.0-beta.2
+  Depends on vulnerable versions of path-to-regexp
+  node_modules/firebase-tools/node_modules/router
+    superstatic  2.0.0-rc1 - 9.0.3
+    Depends on vulnerable versions of router
+    node_modules/firebase-tools/node_modules/superstatic
+
+postcss  <8.4.31
+Severity: moderate
+PostCSS line return parsing error - https://github.com/advisories/GHSA-7fh5-64p2-3v2j
+fix available via `npm audit fix --force`
+Will install @vue/eslint-config-standard@9.0.1, which is a breaking change
+node_modules/@vue/component-compiler-utils/node_modules/postcss
+  @vue/component-compiler-utils  *
+  Depends on vulnerable versions of postcss
+  node_modules/@vue/component-compiler-utils
+    @vue/cli-service  *
+    Depends on vulnerable versions of @vue/cli-plugin-router
+    Depends on vulnerable versions of @vue/cli-plugin-vuex
+    Depends on vulnerable versions of @vue/component-compiler-utils
+    Depends on vulnerable versions of vue-loader
+    Depends on vulnerable versions of vue-template-compiler
+    Depends on vulnerable versions of webpack-dev-server
+    node_modules/@vue/cli-service
+      @vue/cli-plugin-router  *
+      Depends on vulnerable versions of @vue/cli-service
+      node_modules/@vue/cli-plugin-router
+      @vue/cli-plugin-vuex  *
+      Depends on vulnerable versions of @vue/cli-service
+      node_modules/@vue/cli-plugin-vuex
+      @vue/eslint-config-standard  5.1.1 - 7.0.0
+      Depends on vulnerable versions of @vue/cli-service
+      node_modules/@vue/eslint-config-standard
+    vue-loader  15.0.0-beta.1 - 15.11.1
+    Depends on vulnerable versions of @vue/component-compiler-utils
+    node_modules/@vue/vue-loader-v15
+
+protobufjs  7.0.0 - 7.2.4
+Severity: critical
+protobufjs Prototype Pollution vulnerability - https://github.com/advisories/GHSA-h755-8qp9-cq85
+fix available via `npm audit fix`
+node_modules/firebase-tools/node_modules/@grpc/grpc-js/node_modules/protobufjs
+node_modules/firebase-tools/node_modules/google-gax/node_modules/protobufjs
+node_modules/firebase-tools/node_modules/proto3-json-serializer/node_modules/protobufjs
+
+
+semver  <=5.7.1 || 6.0.0 - 6.3.0 || 7.0.0 - 7.5.1
+Severity: high
+semver vulnerable to Regular Expression Denial of Service - https://github.com/advisories/GHSA-c2qf-rxjj-qqgw
+semver vulnerable to Regular Expression Denial of Service - https://github.com/advisories/GHSA-c2qf-rxjj-qqgw
+semver vulnerable to Regular Expression Denial of Service - https://github.com/advisories/GHSA-c2qf-rxjj-qqgw
+fix available via `npm audit fix`
+node_modules/firebase-tools/node_modules/@npmcli/fs/node_modules/semver
+node_modules/firebase-tools/node_modules/exegesis/node_modules/semver
+node_modules/firebase-tools/node_modules/google-gax/node_modules/semver
+node_modules/firebase-tools/node_modules/jsonwebtoken/node_modules/semver
+node_modules/firebase-tools/node_modules/make-dir/node_modules/semver
+node_modules/firebase-tools/node_modules/node-gyp/node_modules/semver
+node_modules/firebase-tools/node_modules/semver
+node_modules/firebase-tools/node_modules/semver-diff/node_modules/semver
+node_modules/firebase-tools/node_modules/update-notifier-cjs/node_modules/semver
+
+send  <0.19.0
+send vulnerable to template injection that can lead to XSS - https://github.com/advisories/GHSA-m6fv-jmcg-4jfg
+fix available via `npm audit fix`
+node_modules/firebase-tools/node_modules/send
+  serve-static  <=1.16.0
+  Depends on vulnerable versions of send
+  node_modules/firebase-tools/node_modules/serve-static
+
+
+tar  <6.2.1
+Severity: moderate
+Denial of service while parsing a tar file due to lack of folders count validation - https://github.com/advisories/GHSA-f5x3-32g6-xq36
+fix available via `npm audit fix`
+node_modules/firebase-tools/node_modules/tar
+
+tmp  <=0.2.3
+tmp allows arbitrary temporary file / directory write via symbolic link `dir` parameter - https://github.com/advisories/GHSA-52f5-9888-hmc6
+fix available via `npm audit fix`
+node_modules/firebase-tools/node_modules/external-editor/node_modules/tmp
+node_modules/firebase-tools/node_modules/tmp
+  external-editor  >=1.1.1
+  Depends on vulnerable versions of tmp
+  node_modules/firebase-tools/node_modules/external-editor
+    inquirer  3.0.0 - 8.2.6 || 9.0.0 - 9.3.7
+    Depends on vulnerable versions of external-editor
+    node_modules/firebase-tools/node_modules/inquirer
+
+tough-cookie  <4.1.3
+Severity: moderate
+tough-cookie Prototype Pollution vulnerability - https://github.com/advisories/GHSA-72xf-g2v4-qvf3
+fix available via `npm audit fix --force`
+Will install firebase-tools@14.24.1, which is a breaking change
+node_modules/firebase-tools/node_modules/tough-cookie
+
+vm2  <=3.9.19
+Severity: critical
+vm2 Sandbox Escape vulnerability - https://github.com/advisories/GHSA-whpj-8f3w-67p5
+vm2 vulnerable to Inspect Manipulation - https://github.com/advisories/GHSA-p5gc-c584-jj6v
+vm2 Sandbox Escape vulnerability - https://github.com/advisories/GHSA-cchq-frgv-rjh5
+vm2 Sandbox Escape vulnerability - https://github.com/advisories/GHSA-g644-9gfx-q4q4
+fix available via `npm audit fix`
+node_modules/firebase-tools/node_modules/vm2
+
+vue  2.0.0-alpha.1 - 2.7.16
+ReDoS vulnerability in vue package that is exploitable through inefficient regex evaluation in the parseHTML function - https://github.com/advisories/GHSA-5j4c-8p2g-v4jx
+fix available via `npm audit fix --force`
+Will install vue@3.5.24, which is a breaking change
+node_modules/vue
+  vue-toastification  0.1.3 - 2.0.0-beta.1
+  Depends on vulnerable versions of vue
+  node_modules/vue-toastification
+  vuetify  <=0.2.0 || 0.8.8 - 0.14.2 || 0.16.7 - 2.7.2
+  Depends on vulnerable versions of vue
+  node_modules/vuetify
+  vuex  3.1.3 - 3.6.2
+  Depends on vulnerable versions of vue
+  node_modules/vuex
+
+vue-template-compiler  >=2.0.0
+Severity: moderate
+vue-template-compiler vulnerable to client-side Cross-Site Scripting (XSS) - https://github.com/advisories/GHSA-g3ch-rx76-35fx
+fix available via `npm audit fix --force`
+Will install @vue/eslint-config-standard@9.0.1, which is a breaking change
+node_modules/vue-template-compiler
+
+webpack-dev-server  <=5.2.0
+Severity: moderate
+webpack-dev-server users' source code may be stolen when they access a malicious web site with non-Chromium based browser - https://github.com/advisories/GHSA-9jgg-88mc-972h
+webpack-dev-server users' source code may be stolen when they access a malicious web site - https://github.com/advisories/GHSA-4v9v-hfq4-rm2v
+fix available via `npm audit fix`
+node_modules/webpack-dev-server
+
+word-wrap  <1.2.4
+Severity: moderate
+word-wrap vulnerable to Regular Expression Denial of Service - https://github.com/advisories/GHSA-j8xg-fqg3-53r7
+fix available via `npm audit fix`
+node_modules/firebase-tools/node_modules/word-wrap
+
+ws  7.0.0 - 7.5.9
+Severity: high
+ws affected by a DoS when handling a request with many HTTP headers - https://github.com/advisories/GHSA-3h5v-q93c-6h6q
+fix available via `npm audit fix`
+node_modules/firebase-tools/node_modules/ws
+
+57 vulnerabilities (15 low, 18 moderate, 19 high, 5 critical)
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+To address all issues possible (including breaking changes), run:
+  npm audit fix --force
+
+Some issues need review, and may require choosing
+a different dependency.

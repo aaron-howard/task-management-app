@@ -1,5 +1,5 @@
 <template>
-  <v-dialog :value="value" @input="$emit('input', $event)" max-width="800">
+  <v-dialog :model-value="modelValue" @update:model-value="$emit('update:modelValue', $event)" max-width="800">
     <v-card v-if="task">
       <v-card-title>
         <div class="d-flex align-center">
@@ -130,7 +130,7 @@
 
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn text @click="$emit('input', false)">Close</v-btn>
+        <v-btn text @click="$emit('update:modelValue', false)">Close</v-btn>
         <v-btn color="primary" @click="$emit('edit', task)">
           <v-icon left>mdi-pencil</v-icon>
           Edit
@@ -147,7 +147,7 @@ import { formatDate, formatDateTime, isOverdue } from '@/utils/dateUtils'
 export default {
   name: 'TaskDetailsDialog',
   props: {
-    value: {
+    modelValue: {
       type: Boolean,
       default: false
     },
